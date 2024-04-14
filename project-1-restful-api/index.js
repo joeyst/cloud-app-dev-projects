@@ -7,31 +7,73 @@ app.listen(port, function () {
     console.log("== Server is listening on port", port);
 });
 
+function hasAll(obj, attrs) {
+  /* Returns whether obj has all attrs. */
+  // The following line was adapted from "Object.keys(obj).every(attr => attr in ['attr1', 'attr2'])",
+  // which was Claude 3 Opus's response to a prompt of mine. 
+  return attrs.every(attr => attr in Object.keys(obj)) 
+}
+
+function sendAppropriateResponse(obj, attrs, res, success_msg="Success!") {
+  if hasAll(obj, attrs) {
+    res.status(200).send(success_msg)
+  } else {
+    res.status(400).send(`Missing keys: ${getAllNotIn(Object.keys(obj), attrs)}`)
+  }
+}
+
+function getAllNotIn(arr1, arr2) {
+  // The following line is [almost] verbatim from Claude 3 Opus: 
+  return arr1.filter(item => !arr2.includes(item))
+}
+
+// Placeholder function 
+function getIfBusinessIdValidFromDatabase(id) {
+  return true
+}
+
+function isValidBusinessId(id) {
+  if isNan(parseInt(id)) {
+    return false
+  } else {
+    return getIfBusinessIdValidFromDatabase(id)
+  }
+}
+
 /* Businesses */ 
 
 // Add 
+const BUSINESS_ADD_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
 app.post('/businesses', (req, res) => {
-
+  sendAppropriateResponse(req.body, BUSINESS_ADD_REQS, res)
 })
 
 // Modify  
-app.post('/businesses', (req, res) => {
-
+app.put('/businesses', (req, res) => {
+  sendAppropriateResponse(req.body, BUSINESS_ADD_REQS, res)
 })
 
 // Remove 
-app.post('/businesses', (req, res) => {
-
+app.delete('/businesses/:businessId', (req, res) => {
+  if isValidBusinessId(req.params.businessId) {
+    res.status(200).send("Success!")
+  } else {
+    res.status(400).send(`Invalid businessId ${businessId}`)
+  }
 })
 
 // Get all  
-app.post('/businesses', (req, res) => {
-
+app.get('/businesses', (req, res) => {
+  // TODO: Send back dummy data. 
 })
 
 // Get 
-app.post('/businesses', (req, res) => {
-
+app.get('/businesses/:businessId', (req, res) => {
+  if isValidBusinessId(req.params.businessId) {
+    res.status(200).send("Success!") // TODO: Send back dummy data. 
+  } else {
+    res.status(400).send(`Invalid businessId ${businessId}`)
+  }
 })
 
 /* Reviews */
@@ -77,20 +119,3 @@ app.post('/photos', (req, res) => {
 app.post('/photos', (req, res) => {
 
 })
-
-/*
-const express = require('express');
-const app = express();
-const PORT = 3000;
- 
-app.post('/',
-    (req, res) => {
-        res.send("POST Request Called")
-    })
- 
-app.listen(PORT,
-    function (err) {
-        if (err) console.log(err);
-        console.log("Server listening on PORT", PORT);
-    });
-*/
