@@ -14,6 +14,16 @@ function hasAll(obj, attrs) {
   return attrs.every(attr => attr in Object.keys(obj)) 
 }
 
+function attributeValidator(attrs) {
+  return (req, res, next) => {
+    if hasAll(req.body, attrs) {
+      next()
+    } else {
+      res.status(400).send(`Missing keys: ${getAllNotIn(Object.keys(req.body), attrs)}`)
+    }
+  }
+}
+
 function sendAppropriateResponse(obj, attrs, res, success_msg="Success!") {
   if hasAll(obj, attrs) {
     res.status(200).send(success_msg)
@@ -44,7 +54,7 @@ function isValidBusinessId(id) {
 
 // Add 
 const BUSINESS_ADD_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
-app.post('/businesses', (req, res) => {
+app.post('/businesses', attributeValidator(BUSINESS_ADD_REQS), (req, res) => {
   sendAppropriateResponse(req.body, BUSINESS_ADD_REQS, res)
 })
 
