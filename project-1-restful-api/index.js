@@ -1,4 +1,4 @@
-var util = require('./util.js'); // { getAttributeValidator } from './util.js';
+var util = require('./util.js'); 
 var getAttributeValidator = util.getAttributeValidator
 
 var express = require('express');
@@ -10,37 +10,12 @@ app.listen(port, function () {
     console.log("== Server is listening on port", port);
 });
 
-function hasAll(obj, attrs) {
-  /* Returns whether obj has all attrs. */
-  // The following line was adapted from "Object.keys(obj).every(attr => attr in ['attr1', 'attr2'])",
-  // which was Claude 3 Opus's response to a prompt of mine. 
-  return attrs.every(attr => attr in Object.keys(obj)) 
-}
-
-function getAttributeValidator(attrs) {
-  return getAttributeValidator(attrs)
-  /*
-  return (req, res, next) => {
-    if (hasAll(req.body, attrs)) {
-      next()
-    } else {
-      res.status(400).send(`Missing keys: ${getAllNotIn(Object.keys(req.body), attrs)}`)
-    }
-  }
-  */
-}
-
 function sendAppropriateResponse(obj, attrs, res, success_msg="Success!") {
   if (hasAll(obj, attrs)) {
     res.status(200).send(success_msg)
   } else {
     res.status(400).send(`Missing keys: ${getAllNotIn(Object.keys(obj), attrs)}`)
   }
-}
-
-function getAllNotIn(arr1, arr2) {
-  // The following line is [almost] verbatim from Claude 3 Opus: 
-  return arr1.filter(item => !arr2.includes(item))
 }
 
 // Placeholder function 
