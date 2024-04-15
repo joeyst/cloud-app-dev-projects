@@ -41,8 +41,12 @@ function sendBusinessPostSuccessMessage(req, res) {
   res.status(200).send(`Successfully added business ${req.body}`)
 }
 
+function sendBusinessPutSuccessMessage(req, res) {
+  res.status(200).send(`Successfully added business ${req.params.businessId}`)
+}
+
 function sendBusinessDeleteSuccessMessage(req, res) {
-  res.status(200).send(`Successfully added business ${req.params.busnessId}`)
+  res.status(200).send(`Successfully added business ${req.params.businessId}`)
 }
 
 function isNumber(str) {
@@ -59,19 +63,13 @@ function validateBusinessId(req, res) {
 
 function addBusinessRoutes(app) {
   // Add 
-  app.post('/businesses', getAttributeValidator(BUSINESS_ADD_REQS), sendBusinessPostSuccessMessage)
+  app.post('/businesses',                                   getAttributeValidator(BUSINESS_ADD_REQS),    sendBusinessPostSuccessMessage)
 
   // Modify  
-  app.put('/businesses/:businessId', validateBusinessId, getAttributeValidator(BUSINESS_MODIFY_REQS), sendBusinessSuccessMessage)
+  app.put('/businesses/:businessId',    validateBusinessId, getAttributeValidator(BUSINESS_MODIFY_REQS), sendBusinessPutSuccessMessage)
 
   // Remove 
-  app.delete('/businesses/:businessId', validateBusinessId, sendBusinessDeleteSuccessMessage) getAttributeValidator(BUSS (req, res) => {
-    if (isValidBusinessId(req.params.businessId)) {
-      res.status(200).send("Success!")
-    } else {
-      res.status(400).send(`Invalid businessId ${businessId}`)
-    }
-  })
+  app.delete('/businesses/:businessId', validateBusinessId,                                              sendBusinessDeleteSuccessMessage) 
 
   // Get all  
   app.get('/businesses', (req, res) => {
