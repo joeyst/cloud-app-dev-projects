@@ -1,4 +1,21 @@
 
+function addBusinessRoutes(app) {
+  // Add 
+  app.post('/businesses',                                   getAttributeValidator(BUSINESS_ADD_REQS),    sendBusinessPostSuccessMessage)
+
+  // Modify  
+  app.put('/businesses/:businessId',    validateBusinessId, getAttributeValidator(BUSINESS_MODIFY_REQS), sendBusinessPutSuccessMessage)
+
+  // Remove 
+  app.delete('/businesses/:businessId', validateBusinessId,                                              sendBusinessDeleteSuccessMessage) 
+
+  // Get all  
+  app.get('/businesses',                                                                                 sendBusinessGetAllSuccessMessage)
+
+  // Get 
+  app.get('/businesses/:businessId',    validateBusinessId,                                              sendBusinessGetSuccessMessage)
+}
+
 const BUSINESS_ADD_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
 const BUSINESS_MODIFY_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
 const BUSINESS_DELETE_REQS = ["businessId"]
@@ -67,29 +84,6 @@ function validateBusinessId(req, res) {
   } else {
     res.status(404).send(`${req.params.businessId} is not a valid ID.`)
   }
-}
-
-function addBusinessRoutes(app) {
-  // Add 
-  app.post('/businesses',                                   getAttributeValidator(BUSINESS_ADD_REQS),    sendBusinessPostSuccessMessage)
-
-  // Modify  
-  app.put('/businesses/:businessId',    validateBusinessId, getAttributeValidator(BUSINESS_MODIFY_REQS), sendBusinessPutSuccessMessage)
-
-  // Remove 
-  app.delete('/businesses/:businessId', validateBusinessId,                                              sendBusinessDeleteSuccessMessage) 
-
-  // Get all  
-  app.get('/businesses',                                                                                 sendBusinessGetAllSuccessMessage)
-
-  // Get 
-  app.get('/businesses/:businessId',    validateBusinessId, (req, res) => {
-    if (isValidBusinessId(req.params.businessId)) {
-      res.status(200).send("Success!") // TODO: Send back dummy data. 
-    } else {
-      res.status(400).send(`Invalid businessId ${businessId}`)
-    }
-  })
 }
 
 module.exports = addBusinessRoutes
