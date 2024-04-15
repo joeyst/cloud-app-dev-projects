@@ -1,6 +1,7 @@
 var util = require('./util.js'); 
 var getAttributeValidator = util.getAttributeValidator
 var addBusinessRoutes = require('./business.js')
+var addReviewRoutes = require('./review.js')
 
 var express = require('express');
 var app = express();
@@ -12,6 +13,7 @@ app.listen(port, function () {
 });
 
 addBusinessRoutes(app)
+addReviewRoutes(app)
 
 /* Reviews */
 

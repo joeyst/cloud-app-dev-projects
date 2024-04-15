@@ -69,4 +69,20 @@ function validateReviewId(req, res, next) {
   }
 }
 
+function validateBusinessId(req, res, next) {
+  if (isNumber(req.params.businessId)) {
+    next()
+  } else {
+    res.status(404).send(`${req.params.businessId} is not a valid ID.`)
+  }
+}
+
+function validateUserId(req, res, next) {
+  if (isNumber(req.params.userId)) {
+    next()
+  } else {
+    res.status(404).send(`${req.params.userId} is not a valid ID.`)
+  }
+}
+
 module.exports = addReviewRoutes
