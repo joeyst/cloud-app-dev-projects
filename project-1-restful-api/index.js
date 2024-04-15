@@ -56,5 +56,3 @@ app.post('/photos', (req, res) => {
 app.post('/photos', (req, res) => {
 
 })
-
-// app.use()
