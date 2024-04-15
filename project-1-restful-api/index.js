@@ -1,5 +1,3 @@
-var util = require('./util.js'); 
-var getAttributeValidator = util.getAttributeValidator
 var addBusinessRoutes = require('./business.js')
 var addReviewRoutes = require('./review.js')
 var addPhotoRoutes = require('./photo.js')
