@@ -47,9 +47,7 @@ app.get('*', (req, res) => {
 
 // Add 
 const BUSINESS_ADD_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
-app.post('/businesses', getAttributeValidator(BUSINESS_ADD_REQS), (req, res) => {
-  sendAppropriateResponse(req.body, BUSINESS_ADD_REQS, res)
-})
+app.post('/businesses', getAttributeValidator(BUSINESS_ADD_REQS), (req, res) => res.status(200).send)
 
 // Modify  
 app.put('/businesses', (req, res) => {

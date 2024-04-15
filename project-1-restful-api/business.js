@@ -37,18 +37,35 @@ function getBusinessDataAll() {
   return getBusinessIds().map(id => getBusinessData(id))
 }
 
+function sendBusinessPostSuccessMessage(req, res) {
+  res.status(200).send(`Successfully added business ${req.body}`)
+}
+
+function sendBusinessDeleteSuccessMessage(req, res) {
+  res.status(200).send(`Successfully added business ${req.params.busnessId}`)
+}
+
+function isNumber(str) {
+  return !isNan(parseInt(str))
+}
+
+function validateBusinessId(req, res) {
+  if (isNumber(req.params.businessId)) {
+    next()
+  } else {
+    res.status(404).send(`${req.params.businessId} is not a valid ID.`)
+  }
+}
+
 function addBusinessRoutes(app) {
-  app.post('/businesses', attributeValidator(BUSINESS_ADD_REQS), (req, res) => {
-    sendAppropriateResponse(req.body, BUSINESS_ADD_REQS, res)
-  })
+  // Add 
+  app.post('/businesses', getAttributeValidator(BUSINESS_ADD_REQS), sendBusinessPostSuccessMessage)
 
   // Modify  
-  app.put('/businesses', (req, res) => {
-    sendAppropriateResponse(req.body, BUSINESS_ADD_REQS, res)
-  })
+  app.put('/businesses/:businessId', validateBusinessId, getAttributeValidator(BUSINESS_MODIFY_REQS), sendBusinessSuccessMessage)
 
   // Remove 
-  app.delete('/businesses/:businessId', validateBusinessId, (req, res) => {
+  app.delete('/businesses/:businessId', validateBusinessId, sendBusinessDeleteSuccessMessage) getAttributeValidator(BUSS (req, res) => {
     if (isValidBusinessId(req.params.businessId)) {
       res.status(200).send("Success!")
     } else {
@@ -70,3 +87,5 @@ function addBusinessRoutes(app) {
     }
   })
 }
+
+module.exports = addBusinessRoutes
