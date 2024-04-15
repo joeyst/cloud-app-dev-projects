@@ -1,4 +1,10 @@
 
+var getAttributeValidator = require('./util.js').getAttributeValidator
+
+/*
+The module is exported as addBusinessRoutes. 
+*/
+
 function addBusinessRoutes(app) {
   // Add 
   app.post('/businesses',                                   getAttributeValidator(BUSINESS_ADD_REQS),    sendBusinessPostSuccessMessage)
@@ -15,6 +21,8 @@ function addBusinessRoutes(app) {
   // Get 
   app.get('/businesses/:businessId',    validateBusinessId,                                              sendBusinessGetSuccessMessage)
 }
+
+
 
 const BUSINESS_ADD_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
 const BUSINESS_MODIFY_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
@@ -75,10 +83,10 @@ function sendBusinessGetSuccessMessage(req, res) {
 }
 
 function isNumber(str) {
-  return !isNan(parseInt(str))
+  return !isNaN(parseInt(str))
 }
 
-function validateBusinessId(req, res) {
+function validateBusinessId(req, res, next) {
   if (isNumber(req.params.businessId)) {
     next()
   } else {
