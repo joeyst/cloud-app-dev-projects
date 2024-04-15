@@ -7,16 +7,16 @@ The module is exported as addBusinessRoutes.
 
 function addBusinessRoutes(app) {
   // Add, modify, remove, get all, get (respectively): 
-  app.post('/businesses',                                   getAttributeValidator(BUSINESS_ADD_REQS),    sendBusinessPostSuccessMessage)
-  app.put('/businesses/:businessId',    validateBusinessId, getAttributeValidator(BUSINESS_MODIFY_REQS), sendBusinessPutSuccessMessage)
+  app.post(  '/businesses',                                 getAttributeValidator(BUSINESS_ADD_REQS),    sendBusinessPostSuccessMessage)
+  app.put(   '/businesses/:businessId', validateBusinessId, getAttributeValidator(BUSINESS_MODIFY_REQS), sendBusinessPutSuccessMessage)
   app.delete('/businesses/:businessId', validateBusinessId,                                              sendBusinessDeleteSuccessMessage) 
-  app.get('/businesses',                                                                                 sendBusinessGetAllSuccessMessage)
-  app.get('/businesses/:businessId',    validateBusinessId,                                              sendBusinessGetSuccessMessage)
+  app.get(   '/businesses',                                                                              sendBusinessGetAllSuccessMessage)
+  app.get(   '/businesses/:businessId', validateBusinessId,                                              sendBusinessGetSuccessMessage)
 }
 
 
 
-const BUSINESS_ADD_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
+const BUSINESS_ADD_REQS    = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
 const BUSINESS_MODIFY_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
 
 function getBusinessData(businessId) {
