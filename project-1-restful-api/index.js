@@ -9,6 +9,7 @@ var app = express();
 
 const port = 3030
 
+/* Taken from module: */
 app.listen(port, function () {
     console.log("== Server is listening on port", port);
 });
@@ -17,46 +18,9 @@ addBusinessRoutes(app)
 addReviewRoutes(app)
 addPhotoRoutes(app)
 
-/* Reviews */
-
-// Add 
-app.post('/reviews', (req, res) => {
-
-})
-
-// Modify 
-app.post('/reviews', (req, res) => {
-
-})
-
-// Remove 
-app.post('/reviews', (req, res) => {
-
-})
-
-// Get all 
-app.post('/reviews', (req, res) => {
-
-})
-
-/* Photos */ 
-
-// Add 
-app.post('/photos', (req, res) => {
-
-})
-
-// Modify  
-app.post('/photos', (req, res) => {
-
-})
-
-// Remove 
-app.post('/photos', (req, res) => {
-
-})
-
-// Get all 
-app.post('/photos', (req, res) => {
-
-})
+/* Taken from module: */
+app.use('*', function (req, res) {
+    res.status(404).send({
+        err: "The requested resource doesn't exist"
+    });
+});
