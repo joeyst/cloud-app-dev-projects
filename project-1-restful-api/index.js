@@ -1,3 +1,6 @@
+var util = require('./util.js'); // { getAttributeValidator } from './util.js';
+var getAttributeValidator = util.getAttributeValidator
+
 var express = require('express');
 var app = express();
 
@@ -14,7 +17,9 @@ function hasAll(obj, attrs) {
   return attrs.every(attr => attr in Object.keys(obj)) 
 }
 
-function attributeValidator(attrs) {
+function getAttributeValidator(attrs) {
+  return getAttributeValidator(attrs)
+  /*
   return (req, res, next) => {
     if (hasAll(req.body, attrs)) {
       next()
@@ -22,6 +27,7 @@ function attributeValidator(attrs) {
       res.status(400).send(`Missing keys: ${getAllNotIn(Object.keys(req.body), attrs)}`)
     }
   }
+  */
 }
 
 function sendAppropriateResponse(obj, attrs, res, success_msg="Success!") {
@@ -66,7 +72,7 @@ app.get('*', (req, res) => {
 
 // Add 
 const BUSINESS_ADD_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
-app.post('/businesses', attributeValidator(BUSINESS_ADD_REQS), (req, res) => {
+app.post('/businesses', getAttributeValidator(BUSINESS_ADD_REQS), (req, res) => {
   sendAppropriateResponse(req.body, BUSINESS_ADD_REQS, res)
 })
 

@@ -36,3 +36,37 @@ function getBusinessDummyIdAll() {
 function getBusinessDataAll() {
   return getBusinessIds().map(id => getBusinessData(id))
 }
+
+function addBusinessRoutes(app) {
+  app.post('/businesses', attributeValidator(BUSINESS_ADD_REQS), (req, res) => {
+    sendAppropriateResponse(req.body, BUSINESS_ADD_REQS, res)
+  })
+
+  // Modify  
+  app.put('/businesses', (req, res) => {
+    sendAppropriateResponse(req.body, BUSINESS_ADD_REQS, res)
+  })
+
+  // Remove 
+  app.delete('/businesses/:businessId', validateBusinessId, (req, res) => {
+    if (isValidBusinessId(req.params.businessId)) {
+      res.status(200).send("Success!")
+    } else {
+      res.status(400).send(`Invalid businessId ${businessId}`)
+    }
+  })
+
+  // Get all  
+  app.get('/businesses', (req, res) => {
+    // TODO: Send back dummy data. 
+  })
+
+  // Get 
+  app.get('/businesses/:businessId', (req, res) => {
+    if (isValidBusinessId(req.params.businessId)) {
+      res.status(200).send("Success!") // TODO: Send back dummy data. 
+    } else {
+      res.status(400).send(`Invalid businessId ${businessId}`)
+    }
+  })
+}
