@@ -16,8 +16,8 @@ function addBusinessRoutes(app) {
 
 
 
-const BUSINESS_ADD_REQS    = ["name", "streetAddress", "city", "state", "zip", "phoneNumber", "category", "subcategories", "website", "email"]
-const BUSINESS_MODIFY_REQS = ["name", "streetAddress", "city", "state", "zip", "phoneNumber", "category", "subcategories", "website", "email"]
+const BUSINESS_ADD_REQS    = ["name", "streetAddress", "city", "state", "zip", "phoneNumber", "category", "subcategories"]
+const BUSINESS_MODIFY_REQS = ["name", "streetAddress", "city", "state", "zip", "phoneNumber", "category", "subcategories"]
 
 function getBusinessData(businessId) {
   return getBusinessDummyData()
