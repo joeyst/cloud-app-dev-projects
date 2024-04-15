@@ -16,7 +16,7 @@ function hasAll(obj, attrs) {
 
 function attributeValidator(attrs) {
   return (req, res, next) => {
-    if hasAll(req.body, attrs) {
+    if (hasAll(req.body, attrs)) {
       next()
     } else {
       res.status(400).send(`Missing keys: ${getAllNotIn(Object.keys(req.body), attrs)}`)
@@ -25,7 +25,7 @@ function attributeValidator(attrs) {
 }
 
 function sendAppropriateResponse(obj, attrs, res, success_msg="Success!") {
-  if hasAll(obj, attrs) {
+  if (hasAll(obj, attrs)) {
     res.status(200).send(success_msg)
   } else {
     res.status(400).send(`Missing keys: ${getAllNotIn(Object.keys(obj), attrs)}`)
@@ -43,12 +43,24 @@ function getIfBusinessIdValidFromDatabase(id) {
 }
 
 function isValidBusinessId(id) {
-  if isNan(parseInt(id)) {
+  if (isNan(parseInt(id))) {
     return false
   } else {
     return getIfBusinessIdValidFromDatabase(id)
   }
 }
+
+function validateBusinessId(req, res, next) {
+
+}
+
+function sendDeleteMessage(req, res) {
+  res.status(200).send("Deleted!")
+}
+
+app.get('*', (req, res) => {
+  res.status(200).send("Success!")
+})
 
 /* Businesses */ 
 
@@ -64,8 +76,8 @@ app.put('/businesses', (req, res) => {
 })
 
 // Remove 
-app.delete('/businesses/:businessId', (req, res) => {
-  if isValidBusinessId(req.params.businessId) {
+app.delete('/businesses/:businessId', validateBusinessId, (req, res) => {
+  if (isValidBusinessId(req.params.businessId)) {
     res.status(200).send("Success!")
   } else {
     res.status(400).send(`Invalid businessId ${businessId}`)
@@ -79,7 +91,7 @@ app.get('/businesses', (req, res) => {
 
 // Get 
 app.get('/businesses/:businessId', (req, res) => {
-  if isValidBusinessId(req.params.businessId) {
+  if (isValidBusinessId(req.params.businessId)) {
     res.status(200).send("Success!") // TODO: Send back dummy data. 
   } else {
     res.status(400).send(`Invalid businessId ${businessId}`)
@@ -129,3 +141,5 @@ app.post('/photos', (req, res) => {
 app.post('/photos', (req, res) => {
 
 })
+
+// app.use()
