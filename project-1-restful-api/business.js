@@ -42,11 +42,19 @@ function sendBusinessPostSuccessMessage(req, res) {
 }
 
 function sendBusinessPutSuccessMessage(req, res) {
-  res.status(200).send(`Successfully added business ${req.params.businessId}`)
+  res.status(200).send(`Successfully updated business ${req.params.businessId}`)
 }
 
 function sendBusinessDeleteSuccessMessage(req, res) {
-  res.status(200).send(`Successfully added business ${req.params.businessId}`)
+  res.status(200).send(`Successfully deleted business ${req.params.businessId}`)
+}
+
+function sendBusinessGetAllSuccessMessage(req, res) {
+  res.status(200).send(getBusinessDataAll())
+}
+
+function sendBusinessGetSuccessMessage(req, res) {
+  res.status(200).send(getBusinessData(req.params.businessId))
 }
 
 function isNumber(str) {
@@ -72,12 +80,10 @@ function addBusinessRoutes(app) {
   app.delete('/businesses/:businessId', validateBusinessId,                                              sendBusinessDeleteSuccessMessage) 
 
   // Get all  
-  app.get('/businesses', (req, res) => {
-    // TODO: Send back dummy data. 
-  })
+  app.get('/businesses',                                                                                 sendBusinessGetAllSuccessMessage)
 
   // Get 
-  app.get('/businesses/:businessId', (req, res) => {
+  app.get('/businesses/:businessId',    validateBusinessId, (req, res) => {
     if (isValidBusinessId(req.params.businessId)) {
       res.status(200).send("Success!") // TODO: Send back dummy data. 
     } else {
