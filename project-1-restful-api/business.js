@@ -6,19 +6,11 @@ The module is exported as addBusinessRoutes.
 */
 
 function addBusinessRoutes(app) {
-  // Add 
+  // Add, modify, remove, get all, get (respectively): 
   app.post('/businesses',                                   getAttributeValidator(BUSINESS_ADD_REQS),    sendBusinessPostSuccessMessage)
-
-  // Modify  
   app.put('/businesses/:businessId',    validateBusinessId, getAttributeValidator(BUSINESS_MODIFY_REQS), sendBusinessPutSuccessMessage)
-
-  // Remove 
   app.delete('/businesses/:businessId', validateBusinessId,                                              sendBusinessDeleteSuccessMessage) 
-
-  // Get all  
   app.get('/businesses',                                                                                 sendBusinessGetAllSuccessMessage)
-
-  // Get 
   app.get('/businesses/:businessId',    validateBusinessId,                                              sendBusinessGetSuccessMessage)
 }
 
@@ -26,9 +18,6 @@ function addBusinessRoutes(app) {
 
 const BUSINESS_ADD_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
 const BUSINESS_MODIFY_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
-const BUSINESS_DELETE_REQS = ["businessId"]
-const BUSINESS_GET_REQS = ["businessId"]
-const BUSINESS_GET_ALL_REQS = []
 
 function getBusinessData(businessId) {
   return getBusinessDummyData()
