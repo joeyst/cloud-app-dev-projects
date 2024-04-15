@@ -6,6 +6,7 @@ var addPhotoRoutes = require('./photo.js')
 
 var express = require('express');
 var app = express();
+app.use(express.json())
 
 const port = 3030
 

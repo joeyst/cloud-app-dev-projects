@@ -13,7 +13,7 @@ function hasAll(obj, attrs) {
   /* Returns whether obj has all attrs. */
   // The following line was adapted from "Object.keys(obj).every(attr => attr in ['attr1', 'attr2'])",
   // which was Claude 3 Opus's response to a prompt of mine. 
-  return attrs.every(attr => attr in Object.keys(obj)) 
+  return attrs.every(attr => attr in obj) 
 }
 
 function getAllNotIn(arr1, arr2) {

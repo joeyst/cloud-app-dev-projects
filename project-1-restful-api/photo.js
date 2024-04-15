@@ -41,7 +41,7 @@ function getPhotoDataAllFromUser(userId) {
 }
 
 function sendPhotoPostSuccessMessage(req, res) {
-  res.status(200).send(`Successfully added photo ${req.body} for business ID ${req.params.businessId}`)
+  res.status(200).send(`Successfully added photo ${JSON.stringify(req.body)} for business ID ${req.params.businessId}`)
 }
 
 function sendPhotoPutSuccessMessage(req, res) {
@@ -64,7 +64,7 @@ function validatePhotoId(req, res, next) {
   if (isNumber(req.params.photoId)) {
     next()
   } else {
-    res.status(404).send(`${req.params.photoId} is not a valid ID.`)
+    res.status(400).send(`${req.params.photoId} is not a valid ID.`)
   }
 }
 
@@ -72,7 +72,7 @@ function validateBusinessId(req, res, next) {
   if (isNumber(req.params.businessId)) {
     next()
   } else {
-    res.status(404).send(`${req.params.businessId} is not a valid ID.`)
+    res.status(400).send(`${req.params.businessId} is not a valid ID.`)
   }
 }
 
@@ -80,7 +80,7 @@ function validateUserId(req, res, next) {
   if (isNumber(req.params.userId)) {
     next()
   } else {
-    res.status(404).send(`${req.params.userId} is not a valid ID.`)
+    res.status(400).send(`${req.params.userId} is not a valid ID.`)
   }
 }
 

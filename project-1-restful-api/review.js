@@ -42,7 +42,7 @@ function getReviewDataAllFromUser(userId) {
 }
 
 function sendReviewPostSuccessMessage(req, res) {
-  res.status(200).send(`Successfully added review ${req.body} for business ID ${req.params.businessId}`)
+  res.status(200).send(`Successfully added review ${JSON.stringify(req.body)} for business ID ${req.params.businessId}`)
 }
 
 function sendReviewPutSuccessMessage(req, res) {
@@ -65,7 +65,7 @@ function validateReviewId(req, res, next) {
   if (isNumber(req.params.reviewId)) {
     next()
   } else {
-    res.status(404).send(`${req.params.reviewId} is not a valid ID.`)
+    res.status(400).send(`${req.params.reviewId} is not a valid ID.`)
   }
 }
 
@@ -73,7 +73,7 @@ function validateBusinessId(req, res, next) {
   if (isNumber(req.params.businessId)) {
     next()
   } else {
-    res.status(404).send(`${req.params.businessId} is not a valid ID.`)
+    res.status(400).send(`${req.params.businessId} is not a valid ID.`)
   }
 }
 
@@ -81,7 +81,7 @@ function validateUserId(req, res, next) {
   if (isNumber(req.params.userId)) {
     next()
   } else {
-    res.status(404).send(`${req.params.userId} is not a valid ID.`)
+    res.status(400).send(`${req.params.userId} is not a valid ID.`)
   }
 }
 

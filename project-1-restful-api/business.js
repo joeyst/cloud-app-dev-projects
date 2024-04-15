@@ -16,8 +16,8 @@ function addBusinessRoutes(app) {
 
 
 
-const BUSINESS_ADD_REQS    = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
-const BUSINESS_MODIFY_REQS = ["name", "street_address", "city", "state", "zip", "phone_number", "category", "subcategories"]
+const BUSINESS_ADD_REQS    = ["name", "streetAddress", "city", "state", "zip", "phoneNumber", "category", "subcategories", "website", "email"]
+const BUSINESS_MODIFY_REQS = ["name", "streetAddress", "city", "state", "zip", "phoneNumber", "category", "subcategories", "website", "email"]
 
 function getBusinessData(businessId) {
   return getBusinessDummyData()
@@ -52,7 +52,7 @@ function getBusinessDataAll() {
 }
 
 function sendBusinessPostSuccessMessage(req, res) {
-  res.status(200).send(`Successfully added business ${req.body}`)
+  res.status(200).send(`Successfully added business ${JSON.stringify(req.body)}`)
 }
 
 function sendBusinessPutSuccessMessage(req, res) {
@@ -79,7 +79,7 @@ function validateBusinessId(req, res, next) {
   if (isNumber(req.params.businessId)) {
     next()
   } else {
-    res.status(404).send(`${req.params.businessId} is not a valid ID.`)
+    res.status(400).send(`${req.params.businessId} is not a valid ID.`)
   }
 }
 
