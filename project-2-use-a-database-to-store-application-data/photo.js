@@ -1,3 +1,5 @@
+const mg = require('./mongoose_.js')
+const Photo = mg.Photo
 
 var getAttributeValidator = require('./util.js').getAttributeValidator
 
@@ -41,7 +43,9 @@ function getPhotoDataAllFromUser(userId) {
 }
 
 function sendPhotoPostSuccessMessage(req, res) {
-  res.status(200).send(`Successfully added photo ${JSON.stringify(req.body)} for business ID ${req.params.businessId}`)
+  res
+    .status(200)
+    .send(Model.find({ ... })) //`Successfully added photo ${JSON.stringify(req.body)} for business ID ${req.params.businessId}`)
 }
 
 function sendPhotoPutSuccessMessage(req, res) {

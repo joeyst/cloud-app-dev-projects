@@ -12,12 +12,37 @@ async function connectDb() {
 
 const photoSchema = new mongoose.Schema({
   photo: String,
-  caption: String,
+  caption: String | null,
 })
 
 const Photo = mongoose.model('Photo', photoSchema)
 
+const reviewSchema = new mongoose.Schema({
+  starRating: Number,
+  dollarSignRating: Number,
+  writtenReview: String | null,
+})
+
+const Review = mongoose.model('Review', reviewSchema)
+
+const businessSchema = new mongoose.Schema({
+  name: String,
+  streetAddress: String,
+  city: String,
+  state: String,
+  zip: String,
+  phoneNumber: String,
+  category: String,
+  subcategories: [String],
+  website: String | null,
+  email: String | null,
+})
+
+const Business = mongoose.model('Business', businessSchema)
+
 module.exports = {
   connectDb: connectDb,
   Photo: Photo,
+  Review: Review,
+  Business: Business,
 }
