@@ -10,6 +10,14 @@ async function connectDb() {
   console.log('Connected to MongoDB');
 }
 
+const photoSchema = new mongoose.Schema({
+  photo: String,
+  caption: String,
+})
+
+const Photo = mongoose.model('Photo', photoSchema)
+
 module.exports = {
-  connectDb: connectDb
+  connectDb: connectDb,
+  Photo: Photo,
 }
