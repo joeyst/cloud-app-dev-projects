@@ -1,0 +1,19 @@
+services:
+  database:
+    image: mongo
+    environment: 
+    - MONGO_INITDB_ROOT_USERNAME=mongousername
+    - MONGO_INITDB_ROOT_PASSWORD=mongopassword
+    - MONGO_INITDB_DATABASE=mongodatabasename
+    ports:
+      - "27017:27017"
+    networks: 
+      - mongo-net 
+
+  api:
+    build: .
+    networks: 
+    - mongo-net
+
+networks:
+  mongo-net: 
