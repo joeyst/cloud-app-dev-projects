@@ -1,4 +1,4 @@
-const { Business } = require('./models.js')
+const { Business, Review, Photo } = require('./models.js')
 
 function postBusiness(req, res) {
   new Business(req.body).save(err => {
@@ -12,7 +12,15 @@ function postBusiness(req, res) {
 }
 
 async function getBusiness(req, res) {
-  res.send(await Business.findById(req.params.businessId))
+  return await Business.findById(req.params.businessId)
+}
+
+async getBusinessData(req, res) {
+  return {
+    business: getBusiness(req, res),
+    reviews: Review.find({businessId: req.params.businessId}),
+    photos: Photo.find({businessId: req.params.businessId}),
+  }
 }
 
 async function putBusiness(req, res) {
