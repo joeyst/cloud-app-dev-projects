@@ -46,6 +46,10 @@ router.get('/', function (req, res) {
    */
   const start = (page - 1) * numPerPage;
   const end = start + numPerPage;
+  // age: { $gte: 18 } }
+  const businessIndices = [...Array(10).keys().map(|i| (i+(page*numPerPage)))]//.toString())]
+  res.send(Business.find({'_id': {$in: businessIndices}}))
+
   const pageBusinesses = businesses.slice(start, end);
 
   /*
@@ -82,6 +86,7 @@ router.post('/', function (req, res, next) {
   if (validateAgainstSchema(req.body, businessSchema)) {
     const business = extractValidFields(req.body, businessSchema);
     business.id = businesses.length;
+    
     businesses.push(business);
     res.status(201).json({
       id: business.id,
