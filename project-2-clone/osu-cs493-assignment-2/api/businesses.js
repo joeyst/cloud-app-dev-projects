@@ -66,11 +66,7 @@ router.get('/', function (req, res) {
 
 });
 
-router.post('/', function (req, res, next) {
-  if (validateAgainstSchema(req.body, businessSchema)) {
-    postBusiness(req, res)
-  }
-});
+router.post('/', postBusiness)
 
 router.get('/:businessid', getBusinessData)
 
