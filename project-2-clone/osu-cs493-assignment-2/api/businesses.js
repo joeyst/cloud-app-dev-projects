@@ -66,57 +66,14 @@ router.get('/', function (req, res) {
 
 });
 
-/*
- * Route to create a new business.
- */
 router.post('/', function (req, res, next) {
   if (validateAgainstSchema(req.body, businessSchema)) {
     postBusiness(req, res)
   }
 });
 
-/*
- * Route to fetch info about a specific business.
- */
-router.get('/:businessid', function (req, res, next) {
-  res.send(getBusinessData(req, res))
-});
+router.get('/:businessid', getBusinessData)
 
-/*
- * Route to replace data for a business.
- */
-router.put('/:businessid', function (req, res, next) {
-  const businessid = parseInt(req.params.businessid);
-  if (businesses[businessid]) {
+router.put('/:businessid', putBusiness)
 
-    if (validateAgainstSchema(req.body, businessSchema)) {
-      businesses[businessid] = extractValidFields(req.body, businessSchema);
-      businesses[businessid].id = businessid;
-      res.status(200).json({
-        links: {
-          business: `/businesses/${businessid}`
-        }
-      });
-    } else {
-      res.status(400).json({
-        error: "Request body is not a valid business object"
-      });
-    }
-
-  } else {
-    next();
-  }
-});
-
-/*
- * Route to delete a business.
- */
-router.delete('/:businessid', function (req, res, next) {
-  const businessid = parseInt(req.params.businessid);
-  if (businesses[businessid]) {
-    businesses[businessid] = null;
-    res.status(204).end();
-  } else {
-    next();
-  }
-});
+router.delete('/:businessid', deleteBusiness)

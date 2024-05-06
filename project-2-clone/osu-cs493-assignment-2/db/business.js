@@ -15,12 +15,12 @@ async function getBusiness(req, res) {
   return await Business.findById(req.params.businessId)
 }
 
-async getBusinessData(req, res) {
-  return {
+async function getBusinessData(req, res) {
+  res.send ({
     business: getBusiness(req, res),
     reviews: Review.find({businessId: req.params.businessId}),
     photos: Photo.find({businessId: req.params.businessId}),
-  }
+  })
 }
 
 async function putBusiness(req, res) {
