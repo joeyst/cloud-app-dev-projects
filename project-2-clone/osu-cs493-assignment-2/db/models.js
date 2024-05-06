@@ -43,7 +43,6 @@ const businessSchema = new mongoose.Schema({
 const Business = mongoose.model('Business', businessSchema)
 
 module.exports = {
-  db: db_,
   Photo: Photo,
   Review: Review,
   Business: Business,

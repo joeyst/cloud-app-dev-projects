@@ -1,5 +1,6 @@
 const mg = require('./mongoose_.js')
-mg.connectDb()
+const db = mg.db
+const dbReview = require('./dbReview.js')
 
 var addBusinessRoutes = require('./business.js')
 var addReviewRoutes = require('./review.js')

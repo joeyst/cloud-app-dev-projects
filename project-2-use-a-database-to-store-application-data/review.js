@@ -1,4 +1,6 @@
 
+const { getReview, postReview, putReview, deleteReview } = require('./dbReview.js')
+
 var getAttributeValidator = require('./util.js').getAttributeValidator
 
 /*
@@ -7,10 +9,10 @@ The module is exported as addReviewRoutes.
 
 function addReviewRoutes(app) {
   // Add, modify, remove, get all: 
-  app.post(  '/reviews/:businessId', validateBusinessId, getAttributeValidator(REVIEW_ADD_REQS),    sendReviewPostSuccessMessage)
-  app.put(   '/reviews/:reviewId',   validateReviewId,   getAttributeValidator(REVIEW_MODIFY_REQS), sendReviewPutSuccessMessage)
-  app.delete('/reviews/:reviewId',   validateReviewId,                                              sendReviewDeleteSuccessMessage) 
-  app.get(   '/reviews/:userId',     validateUserId,                                                sendReviewGetAllFromUserSuccessMessage)
+  app.post(  '/reviews/:businessId', validateBusinessId, getAttributeValidator(REVIEW_ADD_REQS),    postReview,   sendReviewPostSuccessMessage)
+  app.put(   '/reviews/:reviewId',   validateReviewId,   getAttributeValidator(REVIEW_MODIFY_REQS), putReview,    sendReviewPutSuccessMessage)
+  app.delete('/reviews/:reviewId',   validateReviewId,                                              deleteReview, sendReviewDeleteSuccessMessage) 
+  app.get(   '/reviews/:userId',     validateUserId,                                                getReview,    sendReviewGetAllFromUserSuccessMessage)
 }
 
 const REVIEW_ADD_REQS    = ["starRating", "dollarSignRating"]

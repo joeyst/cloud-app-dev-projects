@@ -45,7 +45,7 @@ function getPhotoDataAllFromUser(userId) {
 function sendPhotoPostSuccessMessage(req, res) {
   res
     .status(200)
-    .send(Model.find({ ... })) //`Successfully added photo ${JSON.stringify(req.body)} for business ID ${req.params.businessId}`)
+    // .send(Model.find({ ... })) //`Successfully added photo ${JSON.stringify(req.body)} for business ID ${req.params.businessId}`)
 }
 
 function sendPhotoPutSuccessMessage(req, res) {
