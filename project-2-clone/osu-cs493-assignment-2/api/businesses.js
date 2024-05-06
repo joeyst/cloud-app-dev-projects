@@ -79,23 +79,7 @@ router.post('/', function (req, res, next) {
  * Route to fetch info about a specific business.
  */
 router.get('/:businessid', function (req, res, next) {
-  getBusiness(req, res)
-  const businessid = parseInt(req.params.businessid);
-  if (businesses[businessid]) {
-    /*
-     * Find all reviews and photos for the specified business and create a
-     * new object containing all of the business data, including reviews and
-     * photos.
-     */
-    const business = {
-      reviews: reviews.filter(review => review && review.businessid === businessid),
-      photos: photos.filter(photo => photo && photo.businessid === businessid)
-    };
-    Object.assign(business, businesses[businessid]);
-    res.status(200).json(business);
-  } else {
-    next();
-  }
+  res.send(getBusinessData(req, res))
 });
 
 /*
