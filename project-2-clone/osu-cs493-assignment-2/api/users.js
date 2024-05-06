@@ -1,5 +1,7 @@
 const router = require('express').Router();
 
+const crud = require('../db/crud.js')
+
 exports.router = router;
 
 const { businesses } = require('./businesses');
@@ -11,6 +13,9 @@ const { photos } = require('./photos');
  */
 router.get('/:userid/businesses', function (req, res) {
   const userid = parseInt(req.params.userid);
+
+  res.send(crud.getUserBusinessList(req, res))
+
   const userBusinesses = businesses.filter(business => business && business.ownerid === userid);
   res.status(200).json({
     businesses: userBusinesses

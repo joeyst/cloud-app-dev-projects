@@ -1,8 +1,13 @@
 
 const mongoose = require('mongoose')
 
+const MONGO_INITDB_ROOT_USERNAME=process.env.MONGO_INITDB_ROOT_USERNAME
+const MONGO_INITDB_ROOT_PASSWORD=process.env.MONGO_INITDB_ROOT_PASSWORD
+const MONGO_INITDB_DATABASE=process.env.MONGO_INITDB_DATABASE
+const MONGO_PORT=process.env.MONGO_PORT
+
 async function connectDb() {
-  await mongoose.connect("mongodb://mongousername:mongopassword@database:27017/mongodatabasename", {
+  await mongoose.connect(`mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@database:${MONGO_PORT}/${MONGO_INITDB_DATABASE}`, {
     authSource: "admin",
     useNewUrlParser: true,
     useUnifiedTopology: true,

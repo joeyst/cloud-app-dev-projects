@@ -3,5 +3,9 @@ WORKDIR /usr/src/app
 COPY . .
 RUN npm install
 ENV PORT=8000
+ENV MONGO_INITDB_ROOT_USERNAME=mongousername
+ENV MONGO_INITDB_ROOT_PASSWORD=mongopassword
+ENV MONGO_INITDB_DATABASE=mongodatabasename
+ENV MONGO_PORT="27017:27017"
 EXPOSE ${PORT}
 CMD [ "npm", "start" ]
