@@ -39,6 +39,7 @@ async function getBusinessList(req, res) {
 module.exports = {
   postBusiness: postBusiness,       // /
   getBusiness: getBusiness,         // /:BusinessID
+  getBusinessData: getBusinessData, // /:BusinessID
   putBusiness: putBusiness,         // /:BusinessID
   deleteBusiness: deleteBusiness,   // /:BusinessID
   getBusinessList: getBusinessList, // / 
