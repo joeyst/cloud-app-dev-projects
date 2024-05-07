@@ -15,15 +15,8 @@ router.get('/', async function (req, res) {
   page = page > lastPage ? lastPage : page;
   page = page < 1 ? 1 : page;
 
-  // Getting business documents where ID is in page. 
-  // const businessIndices = [...Array(numPerPage).keys().map(i => (i+((page - 1)*numPerPage)))]//.toString())]
   const businessList = await Business.find().skip((page - 1)*numPerPage).limit(numPerPage) 
-  // const condition = {'_id': {$in: businessIndices}}
-  // const businessList = await getInstancesAsJSON(Business, condition)
 
-  /*
-   * Generate HATEOAS links for surrounding pages.
-   */
   const links = {};
   if (page < lastPage) {
     links.nextPage = `/businesses?page=${page + 1}`;
@@ -34,9 +27,6 @@ router.get('/', async function (req, res) {
     links.firstPage = '/businesses?page=1';
   }
 
-  /*
-   * Construct and send response.
-   */
   res.status(200).json({
     businesses: businessList,
     pageNumber: page,
