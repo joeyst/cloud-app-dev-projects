@@ -135,13 +135,6 @@ curl -v -X DELETE http://localhost:8000/reviews/ab
 # ==== Photo endpoints ====
 echo -e "${CYAN}"
 
-# Get 
-status 'GET photos-list-by-user-id should return success'
-curl http://localhost:8000/photos/0
-
-status 'GET photos-list-by-user-id should return failure'
-curl http://localhost:8000/photos/ab
-
 # Post 
 status 'POST photos-by-business-id should return success'
 curl -v -X POST \
@@ -151,6 +144,13 @@ curl -v -X POST \
       "caption": "someCaption"
     }' \
     http://localhost:8000/photos/0
+
+# Get 
+status 'GET photos-list-by-user-id should return success'
+curl http://localhost:8000/photos/0
+
+status 'GET photos-list-by-user-id should return failure'
+curl http://localhost:8000/photos/ab
 
 # Put 
 status 'PUT photos-by-photo-id should return success'
