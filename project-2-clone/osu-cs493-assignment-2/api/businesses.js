@@ -4,6 +4,7 @@ const { validateAgainstSchema, extractValidFields } = require('../lib/validation
 const businesses = require('../data/businesses');
 const { reviews } = require('./reviews');
 const { photos } = require('./photos');
+const { Business } = require('../db/models');
 
 const { postBusiness, getBusinessData, putBusiness, deleteBusiness, getBusinessList } = require('../db/crud.js')
 
@@ -38,7 +39,7 @@ router.get('/', function (req, res) {
   page = page < 1 ? 1 : page;
 
   // Getting business documents where ID is in page. 
-  const businessIndices = [...Array(numPerPage).keys().map(|i| (i+((page - 1)*numPerPage)))]//.toString())]
+  const businessIndices = [...Array(numPerPage).keys().map(i => (i+((page - 1)*numPerPage)))]//.toString())]
   const businessList = Business.find({'_id': {$in: businessIndices}})
 
   /*
