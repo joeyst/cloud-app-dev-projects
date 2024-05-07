@@ -4,14 +4,14 @@ const { getInstancesAsJSON, convertInstancesAsJSON } = require('./util.js')
 async function postBusiness(req, res) {
   res.send(new Business(req.body).save())
   
-  new Business(req.body).save(err => {
-    if (err) {
-      res.status(400).send()
-    } else {
-      console.log("Business saved!")
-      res.status(200).send()
-    }
-  })
+  // new Business(req.body).save(err => {
+  //   if (err) {
+  //     res.status(400).send()
+  //   } else {
+  //     console.log("Business saved!")
+  //     res.status(200).send()
+  //   }
+  // })
 }
 
 async function getBusiness(req, res) {
@@ -28,7 +28,7 @@ async function getBusinessData(req, res) {
 }
 
 async function putBusiness(req, res) {
-  res.send(await Business.findByIdAndUpdate(req.params.businessId, req.body, { new: true }).then(convertInstancesAsJSON))
+  res.send(await Business.findByIdAndUpdate(req.params.businessId, req.body, { new: true }).then(instance => instance?.toJSON()))
 }
 
 async function deleteBusiness(req, res) {

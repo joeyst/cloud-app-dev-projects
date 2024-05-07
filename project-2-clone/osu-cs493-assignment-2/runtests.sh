@@ -14,14 +14,14 @@ echo -e "${BLUE}"
 
 # Get 
 status 'GET business-by-id should return success'
-curl http://localhost:3030/businesses/0
+curl http://localhost:8000/businesses/0
 
 status 'GET business-by-id should return failure'
-curl http://localhost:3030/businesses/ab
+curl http://localhost:8000/businesses/ab
 
 # Get all 
 status 'GET business list should return success'
-curl http://localhost:3030/businesses/
+curl http://localhost:8000/businesses/
 
 # Post 
 status 'POST business-by-response-body should return success'
@@ -39,7 +39,7 @@ curl -v -X POST \
       "website": "someWebsite.someTopLevelDomain", 
       "email": "someEmail@someDomain" 
     }' \
-    http://localhost:3030/businesses/
+    http://localhost:8000/businesses/
 
 # Put 
 status 'PUT business-by-response-body-by-id should return success'
@@ -57,7 +57,7 @@ curl -v -X PUT \
       "website": "someWebsite.someTopLevelDomain", 
       "email": "someEmail@someDomain" 
     }' \
-    http://localhost:3030/businesses/0
+    http://localhost:8000/businesses/0
 
 status 'PUT business-by-response-body-by-id should return failure'
 curl -v -X PUT \
@@ -74,24 +74,24 @@ curl -v -X PUT \
       "website": "someWebsite.someTopLevelDomain", 
       "email": "someEmail@someDomain" 
     }' \
-    http://localhost:3030/businesses/ab
+    http://localhost:8000/businesses/ab
 
 # Delete 
 status 'DELETE business-by-id should return success'
-curl -v -X DELETE http://localhost:3030/businesses/0
+curl -v -X DELETE http://localhost:8000/businesses/0
 
 status 'DELETE business-by-id should return failure'
-curl -v -X DELETE http://localhost:3030/businesses/ab
+curl -v -X DELETE http://localhost:8000/businesses/ab
 
 # ==== Review endpoints ====
 echo -e "${PURPLE}"
 
 # Get 
 status 'GET reviews-list-by-user-id should return success'
-curl http://localhost:3030/reviews/0
+curl http://localhost:8000/reviews/0
 
 status 'GET reviews-list-by-user-id should return failure'
-curl http://localhost:3030/reviews/ab
+curl http://localhost:8000/reviews/ab
 
 # Post 
 status 'POST reviews-by-business-id should return success'
@@ -102,7 +102,7 @@ curl -v -X POST \
       "dollarSignRating": "someDollarSignRating",
       "writtenReview": "someWrittenReview"
     }' \
-    http://localhost:3030/reviews/0
+    http://localhost:8000/reviews/0
 
 # Put 
 status 'PUT reviews-by-review-id should return success'
@@ -113,7 +113,7 @@ curl -v -X PUT \
       "dollarSignRating": "someDollarSignRating",
       "writtenReview": "someWrittenReview"
     }' \
-    http://localhost:3030/reviews/0
+    http://localhost:8000/reviews/0
 
 status 'PUT reviews-by-review-id should return failure'
 curl -v -X PUT \
@@ -123,24 +123,24 @@ curl -v -X PUT \
       "dollarSignRating": "someDollarSignRating",
       "writtenReview": "someWrittenReview"
     }' \
-    http://localhost:3030/reviews/ab
+    http://localhost:8000/reviews/ab
 
 # Delete 
 status 'DELETE review-by-id should return success'
-curl -v -X DELETE http://localhost:3030/reviews/0
+curl -v -X DELETE http://localhost:8000/reviews/0
 
 status 'DELETE review-by-id should return failure'
-curl -v -X DELETE http://localhost:3030/reviews/ab
+curl -v -X DELETE http://localhost:8000/reviews/ab
 
 # ==== Photo endpoints ====
 echo -e "${CYAN}"
 
 # Get 
 status 'GET photos-list-by-user-id should return success'
-curl http://localhost:3030/photos/0
+curl http://localhost:8000/photos/0
 
 status 'GET photos-list-by-user-id should return failure'
-curl http://localhost:3030/photos/ab
+curl http://localhost:8000/photos/ab
 
 # Post 
 status 'POST photos-by-business-id should return success'
@@ -150,7 +150,7 @@ curl -v -X POST \
       "photo": "somePhoto",
       "caption": "someCaption"
     }' \
-    http://localhost:3030/photos/0
+    http://localhost:8000/photos/0
 
 # Put 
 status 'PUT photos-by-photo-id should return success'
@@ -160,7 +160,7 @@ curl -v -X PUT \
       "photo": "somePhoto",
       "caption": "someCaption"
     }' \
-    http://localhost:3030/photos/0
+    http://localhost:8000/photos/0
 
 status 'PUT photo-by-photo-id should return failure'
 curl -v -X PUT \
@@ -169,11 +169,11 @@ curl -v -X PUT \
       "photo": "somePhoto",
       "caption": "someCaption"
     }' \
-    http://localhost:3030/photos/ab
+    http://localhost:8000/photos/ab
 
 # Delete 
 status 'DELETE photo-by-id should return success'
-curl -v -X DELETE http://localhost:3030/photos/0
+curl -v -X DELETE http://localhost:8000/photos/0
 
 status 'DELETE photo-by-id should return failure'
-curl -v -X DELETE http://localhost:3030/photos/ab
+curl -v -X DELETE http://localhost:8000/photos/ab
