@@ -24,13 +24,15 @@ const photoSchema = new mongoose.Schema({
   _id: Number,
   photo: String,
   caption: {type: String, required: false}, // | null,
-  userId: Number,
+  userid: Number,
 }, { _id: false })
 
 const Photo = mongoose.model('Photo', photoSchema)
 
 const reviewSchema = new mongoose.Schema({
   _id: Number,
+  userid: Number,
+  businessid: Number,
   starRating: Number,
   dollarSignRating: Number,
   writtenReview: {type: String, required: false} // | null,

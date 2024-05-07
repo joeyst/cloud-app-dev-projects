@@ -1,17 +1,8 @@
-const { Business, Review, Photo } = require('./models.js')
+const { Business, Review, Photo, getBusinessDocument } = require('./models.js')
 const { getInstancesAsJSON, convertInstancesAsJSON } = require('./util.js')
 
 async function postBusiness(req, res) {
-  res.send(new Business(req.body).save())
-  
-  // new Business(req.body).save(err => {
-  //   if (err) {
-  //     res.status(400).send()
-  //   } else {
-  //     console.log("Business saved!")
-  //     res.status(200).send()
-  //   }
-  // })
+  res.send(getBusinessDocument(req.body).save())
 }
 
 async function getBusiness(req, res) {

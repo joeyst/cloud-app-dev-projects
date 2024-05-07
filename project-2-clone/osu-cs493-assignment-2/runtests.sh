@@ -12,17 +12,6 @@ NC='\033[0m' # No Color
 # ==== Business endpoints ==== 
 echo -e "${BLUE}"
 
-# Get 
-status 'GET business-by-id should return success'
-curl http://localhost:8000/businesses/0
-
-status 'GET business-by-id should return failure'
-curl http://localhost:8000/businesses/ab
-
-# Get all 
-status 'GET business list should return success'
-curl http://localhost:8000/businesses/
-
 # Post 
 status 'POST business-by-response-body should return success'
 curl -v -X POST \
@@ -40,6 +29,17 @@ curl -v -X POST \
       "email": "someEmail@someDomain" 
     }' \
     http://localhost:8000/businesses/
+
+# Get 
+status 'GET business-by-id should return success'
+curl http://localhost:8000/businesses/0
+
+status 'GET business-by-id should return failure'
+curl http://localhost:8000/businesses/ab
+
+# Get all 
+status 'GET business list should return success'
+curl http://localhost:8000/businesses/
 
 # Put 
 status 'PUT business-by-response-body-by-id should return success'
@@ -86,13 +86,6 @@ curl -v -X DELETE http://localhost:8000/businesses/ab
 # ==== Review endpoints ====
 echo -e "${PURPLE}"
 
-# Get 
-status 'GET reviews-list-by-user-id should return success'
-curl http://localhost:8000/reviews/0
-
-status 'GET reviews-list-by-user-id should return failure'
-curl http://localhost:8000/reviews/ab
-
 # Post 
 status 'POST reviews-by-business-id should return success'
 curl -v -X POST \
@@ -103,6 +96,13 @@ curl -v -X POST \
       "writtenReview": "someWrittenReview"
     }' \
     http://localhost:8000/reviews/0
+
+# Get 
+status 'GET reviews-list-by-user-id should return success'
+curl http://localhost:8000/reviews/0
+
+status 'GET reviews-list-by-user-id should return failure'
+curl http://localhost:8000/reviews/ab
 
 # Put 
 status 'PUT reviews-by-review-id should return success'

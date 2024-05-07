@@ -1,7 +1,7 @@
-const { Photo } = require('./models.js')
+const { Photo, getPhotoDocument } = require('./models.js')
 
 function postPhoto(req, res) {
-  new Photo(req.body).save(err => {
+  getPhotoDocument(req).save(err => {
     if (err) {
       res.status(400).send()
     } else {
