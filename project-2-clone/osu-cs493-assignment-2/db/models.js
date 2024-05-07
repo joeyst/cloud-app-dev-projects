@@ -33,7 +33,7 @@ const reviewSchema = new mongoose.Schema({
 const Review = mongoose.model('Review', reviewSchema)
 
 const businessSchema = new mongoose.Schema({
-  name: String,
+  name: {type: String, required: true},
   streetAddress: String,
   city: String,
   state: String,

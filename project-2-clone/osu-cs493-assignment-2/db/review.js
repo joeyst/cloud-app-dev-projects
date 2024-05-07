@@ -12,7 +12,7 @@ function postReview(req, res) {
 }
 
 async function getReview(req, res) {
-  res.send(await Review.findById(req.params.reviewId))
+  res.send((await Review.findById(req.params.reviewId)).toJSON())
 }
 
 async function putReview(req, res) {
