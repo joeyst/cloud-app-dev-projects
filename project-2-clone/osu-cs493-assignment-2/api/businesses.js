@@ -38,7 +38,14 @@ router.get('/', async function (req, res) {
 
 });
 
-router.post('/', postBusiness)
+router.post('/', (req, res) => {
+  try {
+    await postBusiness(req, res)
+  } 
+  catch (err) {
+    console.log(`ERROR: ${err}`)
+  }
+})
 
 router.get('/:businessid', getBusinessData)
 

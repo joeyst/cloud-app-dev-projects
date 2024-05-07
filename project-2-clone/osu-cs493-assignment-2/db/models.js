@@ -57,21 +57,28 @@ const businessSchema = new mongoose.Schema({
 const Business = mongoose.model('Business', businessSchema)
 
 function getPhotoDocument(req) {
+  const { photo, caption, userid } = req.body 
   const photoId = nextPhotoId
   nextPhotoId += 1
-  return new Photo(...req.body, photoId)
+  return new Photo(Object.assign(req.body, {_id: photoId})) //photoId, photo, caption, userid)
 }
 
 function getReviewDocument(req) {
+  const { userid, businessid, starRating, dollarSignRating, writtenReview } = req.body 
   const reviewId = nextReviewId
   nextReviewId += 1
-  return new Review(...req.body, reviewId)
+  return new Review(Object.assign(req.body, {_id: reviewId})) //reviewId, userid, businessid, starRating, dollarSignRating, writtenReview)
 }
 
 function getBusinessDocument(req) {
+  try {
   const businessId = nextBusinessId
   nextBusinessId += 1
-  return new Business(...req.body, businessId)
+  return new Business(Object.assign(req.body, {_id: businessId})) //businessId, name, streetAddress, city, state, zip, phoneNumber, category, subcategories, website, email)
+  }
+  catch (err) {
+    console.log(`ERROR: ${err}`)
+  }
 }
 
 module.exports = {
