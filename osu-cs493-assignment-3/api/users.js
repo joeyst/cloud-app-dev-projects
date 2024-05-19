@@ -7,6 +7,17 @@ const { Review } = require('../models/review')
 const router = Router()
 
 /*
+ * TODO: Add POST /users with provided name, email address, and password, and salted and hashed password on server before storing it.
+ */
+router.get('/:userId/businesses', async function (req, res) {
+  const userId = req.params.userId
+  const userBusinesses = await Business.findAll({ where: { ownerId: userId }})
+  res.status(200).json({
+    businesses: userBusinesses
+  })
+})
+
+/*
  * Route to list all of a user's businesses.
  */
 router.get('/:userId/businesses', async function (req, res) {
