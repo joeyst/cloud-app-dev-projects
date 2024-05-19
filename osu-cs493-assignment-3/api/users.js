@@ -9,10 +9,25 @@ const router = Router()
 const secret_key = process.env.APP_SECRET_KEY;
 
 /*
- * TODO: Add POST /users with provided name, email address, and password, and salted and hashed password on server before storing it.
+ * Route to create new account from user name, email, and password. 
  */
+// TODO: Do we need to return the ID here? 
 router.post('/', async function (req, res) {
-  const { id, name, email, password, admin } = req.params
+  const existingUser = await User.findOne({ where: { email: req.body.email }})
+  if (!(existingUser == null)) {
+    res.status(401).send(`User with email ${email} already exists.`)
+    return
+  }
+
+  await User.create(Object.assign(req.body, {admin: false}), UserClientFields)
+  res.status(200).send("Created user!")
+})
+
+/* 
+ * Route to get JWT from user email and password. 
+ */
+router.post('/login', async function (req, res) {
+  const { email, password } = req.params
   const user = await User.find({ where: { email: email }})
 
   if (user == null) {
