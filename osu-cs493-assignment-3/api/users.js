@@ -28,7 +28,7 @@ router.post('/', async function (req, res) {
  */
 router.post('/login', async function (req, res) {
   const { email, password } = req.params
-  const user = await User.find({ where: { email: email }})
+  const user = await User.findOne({ where: { email: email }})
 
   if (user == null) {
     res.status(401).send(`Unable to find email ${email}`)
