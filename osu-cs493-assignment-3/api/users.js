@@ -29,7 +29,7 @@ router.post('/', async function (req, res) {
  */
 router.post('/login', async function (req, res) {
   const { email, password } = req.params
-  const user = await User.findOne({ where: { email: email }})
+  const user = await User.findOne({ where: { email: email }, attributes: ['id', 'name', 'email'] })
 
   if (user == null) {
     res.status(401).send(`Unable to find email ${email}`)
@@ -41,8 +41,20 @@ router.post('/login', async function (req, res) {
     return
   }
 
-  const token = jwt.sign({ id: id, name: name, email: email }, secret_key)
+  const token = jwt.sign(user.toJSON(), secret_key)
   res.status(200).json({token})
+})
+
+/* 
+ * Route to get user information excluding password. 
+ */
+router.get('/users/:userId', async function (req, res) {
+  const user = await User.findByPk(req.query.userId, { attributes: ['name', 'email', 'id', 'admin'] })
+  if (user == null) {
+    res.status(401).send(`Unable to find user with ID ${req.query.userId}`)
+    return
+  }
+  res.status(200).json(user.toJSON())
 })
 
 /*
