@@ -3,15 +3,15 @@ const { Router } = require('express')
 const { Business } = require('../models/business')
 const { Photo } = require('../models/photo')
 const { Review } = require('../models/review')
-const { User } = require('../models/user')
+const { User, isAdmin } = require('../models/user')
 
 const requireAuthentication = require('../lib/requireAuthentication')
 
 const router = Router()
 
-async function isAdmin(token) {
-	const user = await User.findOne({ where: { email: req.body.email }})
-  return (user.admin == true)
+async function isAdmin(userData) {
+	const user = await User.findOne({ where: { email: userData.email }})
+  return (user.admin == true) // I feel like being explicit with == true here makes it more obvious what it's doing. 
 }
 
 async function isValidUrlUserId(req, res, next) {

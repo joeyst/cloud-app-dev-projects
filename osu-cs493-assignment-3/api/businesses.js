@@ -7,6 +7,8 @@ const { Review } = require('../models/review')
 
 const router = Router()
 
+const requireAuthentication = require('../lib/requireAuthentication')
+
 /*
  * Route to return a list of businesses.
  */
@@ -55,8 +57,11 @@ router.get('/', async function (req, res) {
 /*
  * Route to create a new business.
  */
-router.post('/', async function (req, res, next) {
+router.post('/', requireAuthentication, async function (req, res, next) {
   try {
+    if (req.user.id != req.body.ownerId) {
+      res.status(401).send("Invalid credentials.")
+    }
     const business = await Business.create(req.body, BusinessClientFields)
     res.status(201).send({ id: business.id })
   } catch (e) {

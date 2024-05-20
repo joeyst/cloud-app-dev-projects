@@ -5,11 +5,18 @@ const { Review, ReviewClientFields } = require('../models/review')
 
 const router = Router()
 
+const requireAuthentication = require('../lib/requireAuthentication')
+
+
+
 /*
  * Route to create a new review.
  */
-router.post('/', async function (req, res, next) {
+router.post('/', requireAuthentication, async function (req, res, next) {
   try {
+    if (req.user.id != req.body.userId) {
+      res.status(401).send("Invalid credentials.")
+    }
     const review = await Review.create(req.body, ReviewClientFields)
     res.status(201).send({ id: review.id })
   } catch (e) {

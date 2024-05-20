@@ -5,11 +5,16 @@ const { Photo, PhotoClientFields } = require('../models/photo')
 
 const router = Router()
 
+const requireAuthentication = require('../lib/requireAuthentication')
+
 /*
  * Route to create a new photo.
  */
-router.post('/', async function (req, res, next) {
+router.post('/', requireAuthentication, async function (req, res, next) {
   try {
+    if (req.user.id != req.body.userId) {
+      res.status(401).send("Invalid credentials.")
+    }
     const photo = await Photo.create(req.body, PhotoClientFields)
     res.status(201).send({ id: photo.id })
   } catch (e) {
