@@ -4,7 +4,7 @@ const sequelize = require('../lib/sequelize')
 
 const User = sequelize.define('user', {
   name: { type: DataTypes.TEXT, allowNull: false },
-  email: { type: DataTypes.TEXT, allowNull: false, unique: true }, 
+  email: { type: DataTypes.STRING(255), allowNull: false, unique: true }, 
   password: { type: DataTypes.TEXT, set(value) {
     this.setDataValue('password', hash(value))
   },

@@ -5,25 +5,27 @@ const { Photo } = require('../models/photo')
 const { Review } = require('../models/review')
 const { User } = require('../models/user')
 
+const requireAuthentication = require('../lib/requireAuthentication')
+
 const router = Router()
 
-const secret_key = process.env.APP_SECRET_KEY;
+async function isAdmin(token) {
+	const user = await User.findOne({ where: { email: req.body.email }})
+  return (user.admin == true)
+}
 
-function requireAuthentication(req, res, next) {
-    // Get the token from the request
-    const auth_header = req.get('Authorization') || '';
-    const header_parts = auth_header.split(' ');
+async function isValidUrlUserId(req, res, next) {
+  if (isAdmin(req.user)) {
+    next()
+    return
+  }
 
-    const token = header_parts[0] == "Bearer"? header_parts[1]: null;
+  if (req.user.id == req.params.userId) {
+    next()
+    return
+  }
 
-    try {
-        const payload = jwt.verify(token, secret_key);
-        req.user = payload.sub;
-        next();
-
-    } catch (err) {
-        res.status(401).json({"error": "invalid token"});
-    }
+  res.status(401).send("Invalid credentials.")
 }
 
 /*
@@ -37,8 +39,8 @@ router.post('/', async function (req, res) {
     return
   }
 
-  await User.create(Object.assign(req.body, {admin: false}), UserClientFields)
-  res.status(200).send("Created user!")
+  const user = await User.create(Object.assign(req.body, {admin: false}), UserClientFields)
+  res.status(201).send(user.toJSON())
 })
 
 /* 
@@ -65,7 +67,7 @@ router.post('/login', async function (req, res) {
 /* 
  * Route to get user information excluding password. 
  */
-router.get('/users/:userId', async function (req, res) {
+router.get('/users/:userId', requireAuthentication, isValidUrlUserId, async function (req, res) {
   const user = await User.findByPk(req.query.userId, { attributes: ['name', 'email', 'id', 'admin'] })
   if (user == null) {
     res.status(401).send(`Unable to find user with ID ${req.query.userId}`)
@@ -77,7 +79,7 @@ router.get('/users/:userId', async function (req, res) {
 /*
  * Route to list all of a user's businesses.
  */
-router.get('/:userId/businesses', async function (req, res) {
+router.get('/:userId/businesses', requireAuthentication, isValidUrlUserId, async function (req, res) {
   const userId = req.params.userId
   const userBusinesses = await Business.findAll({ where: { ownerId: userId }})
   res.status(200).json({
@@ -88,7 +90,7 @@ router.get('/:userId/businesses', async function (req, res) {
 /*
  * Route to list all of a user's reviews.
  */
-router.get('/:userId/reviews', async function (req, res) {
+router.get('/:userId/reviews', requireAuthentication, isValidUrlUserId, async function (req, res) {
   const userId = req.params.userId
   const userReviews = await Review.findAll({ where: { userId: userId }})
   res.status(200).json({
@@ -99,7 +101,7 @@ router.get('/:userId/reviews', async function (req, res) {
 /*
  * Route to list all of a user's photos.
  */
-router.get('/:userId/photos', async function (req, res) {
+router.get('/:userId/photos', requireAuthentication, isValidUrlUserId, async function (req, res) {
   const userId = req.params.userId
   const userPhotos = await Photo.findAll({ where: { userId: userId }})
   res.status(200).json({
