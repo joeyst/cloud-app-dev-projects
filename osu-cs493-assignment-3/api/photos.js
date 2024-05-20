@@ -7,10 +7,24 @@ const router = Router()
 
 const requireAuthentication = require('../lib/requireAuthentication')
 
+async function isValidReqBodyUserId(req, res, next) {
+  if (isAdmin(req)) {
+    next()
+    return
+  }
+
+  if (req.user.id == req.body.userId) {
+    next()
+    return
+  }
+
+  res.status(401).send("Invalid credentials.")
+} 
+
 /*
  * Route to create a new photo.
  */
-router.post('/', requireAuthentication, async function (req, res, next) {
+router.post('/', requireAuthentication, isValidReqBodyUserId, async function (req, res, next) {
   try {
     if (req.user.id != req.body.userId) {
       res.status(401).send("Invalid credentials.")
@@ -42,7 +56,7 @@ router.get('/:photoId', async function (req, res, next) {
 /*
  * Route to update a photo.
  */
-router.patch('/:photoId', async function (req, res, next) {
+router.patch('/:photoId', requireAuthentication, isValidReqBodyUserId, async function (req, res, next) {
   const photoId = req.params.photoId
 
   /*
@@ -64,7 +78,7 @@ router.patch('/:photoId', async function (req, res, next) {
 /*
  * Route to delete a photo.
  */
-router.delete('/:photoId', async function (req, res, next) {
+router.delete('/:photoId', requireAuthentication, isValidReqBodyUserId, async function (req, res, next) {
   const photoId = req.params.photoId
   const result = await Photo.destroy({ where: { id: photoId }})
   if (result > 0) {

@@ -9,13 +9,8 @@ const requireAuthentication = require('../lib/requireAuthentication')
 
 const router = Router()
 
-async function isAdmin(userData) {
-	const user = await User.findOne({ where: { email: userData.email }})
-  return (user.admin == true) // I feel like being explicit with == true here makes it more obvious what it's doing. 
-}
-
 async function isValidUrlUserId(req, res, next) {
-  if (isAdmin(req.user)) {
+  if (isAdmin(req)) {
     next()
     return
   }
@@ -40,7 +35,7 @@ router.post('/', async function (req, res) {
   }
 
   const user = await User.create(Object.assign(req.body, {admin: false}), UserClientFields)
-  res.status(201).send(user.toJSON())
+  res.status(201).send(user.toJSON().id)
 })
 
 /* 

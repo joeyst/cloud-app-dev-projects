@@ -9,6 +9,20 @@ const router = Router()
 
 const requireAuthentication = require('../lib/requireAuthentication')
 
+async function isValidReqBodyOwnerId(req, res, next) {
+  if (isAdmin(req)) {
+    next()
+    return
+  }
+
+  if (req.user.id == req.body.ownerId) {
+    next()
+    return
+  }
+
+  res.status(401).send("Invalid credentials.")
+}
+
 /*
  * Route to return a list of businesses.
  */
@@ -57,7 +71,7 @@ router.get('/', async function (req, res) {
 /*
  * Route to create a new business.
  */
-router.post('/', requireAuthentication, async function (req, res, next) {
+router.post('/', requireAuthentication, isValidReqBodyOwnerId, async function (req, res, next) {
   try {
     if (req.user.id != req.body.ownerId) {
       res.status(401).send("Invalid credentials.")
@@ -91,7 +105,7 @@ router.get('/:businessId', async function (req, res, next) {
 /*
  * Route to update data for a business.
  */
-router.patch('/:businessId', async function (req, res, next) {
+router.patch('/:businessId', requireAuthentication, isValidReqBodyOwnerId, async function (req, res, next) {
   const businessId = req.params.businessId
   const result = await Business.update(req.body, {
     where: { id: businessId },
@@ -107,7 +121,7 @@ router.patch('/:businessId', async function (req, res, next) {
 /*
  * Route to delete a business.
  */
-router.delete('/:businessId', async function (req, res, next) {
+router.delete('/:businessId', requireAuthentication, isValidReqBodyOwnerId, async function (req, res, next) {
   const businessId = req.params.businessId
   const result = await Business.destroy({ where: { id: businessId }})
   if (result > 0) {

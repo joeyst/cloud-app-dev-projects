@@ -7,12 +7,26 @@ const router = Router()
 
 const requireAuthentication = require('../lib/requireAuthentication')
 
+const { isAdmin } = require('../models/user')
 
+async function isValidReqBodyUserId(req, res, next) {
+  if (isAdmin(req)) {
+    next()
+    return
+  }
+
+  if (req.user.id == req.body.userId) {
+    next()
+    return
+  }
+
+  res.status(401).send("Invalid credentials.")
+}
 
 /*
  * Route to create a new review.
  */
-router.post('/', requireAuthentication, async function (req, res, next) {
+router.post('/', requireAuthentication, isValidReqBodyUserId, async function (req, res, next) {
   try {
     if (req.user.id != req.body.userId) {
       res.status(401).send("Invalid credentials.")
@@ -44,7 +58,7 @@ router.get('/:reviewId', async function (req, res, next) {
 /*
  * Route to update a review.
  */
-router.patch('/:reviewId', async function (req, res, next) {
+router.patch('/:reviewId', requireAuthentication, isValidReqBodyUserId, async function (req, res, next) {
   const reviewId = req.params.reviewId
 
   /*
@@ -66,7 +80,7 @@ router.patch('/:reviewId', async function (req, res, next) {
 /*
  * Route to delete a review.
  */
-router.delete('/:reviewId', async function (req, res, next) {
+router.delete('/:reviewId', requireAuthentication, isValidReqBodyUserId, async function (req, res, next) {
   const reviewId = req.params.reviewId
   const result = await Review.destroy({ where: { id: reviewId }})
   if (result > 0) {
