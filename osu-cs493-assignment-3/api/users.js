@@ -69,7 +69,7 @@ router.post('/login', async function (req, res) {
 /* 
  * Route to get user information excluding password. 
  */
-router.get('/users/:userId', requireAuthentication, isValidUrlUserId, async function (req, res) {
+router.get('/:userId', requireAuthentication, isValidUrlUserId, async function (req, res) {
   const user = await User.findByPk(req.query.userId, { attributes: ['name', 'email', 'id', 'admin'] })
   if (user == null) {
     res.status(401).send(`Unable to find user with ID ${req.query.userId}`)
