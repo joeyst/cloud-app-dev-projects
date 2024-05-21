@@ -1,13 +1,18 @@
 const { Router } = require('express')
+// const { compareSync, compare } = require('bcrypt')
+const bcrypt = require('bcrypt')
 
 const { Business } = require('../models/business')
 const { Photo } = require('../models/photo')
 const { Review } = require('../models/review')
-const { User, isAdmin } = require('../models/user')
+const { User, UserClientFields, isAdmin } = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 const requireAuthentication = require('../lib/requireAuthentication')
 
 const router = Router()
+
+const secret_key = process.env.APP_SECRET_KEY
 
 async function isValidUrlUserId(req, res, next) {
   if (isAdmin(req)) {
@@ -27,36 +32,40 @@ async function isValidUrlUserId(req, res, next) {
  * Route to create new account from user name, email, and password. 
  */
 // TODO: Do we need to return the ID here? 
+// TODO: If req.body includes admin attribute, just overwrite, or return error? 
 router.post('/', async function (req, res) {
   const existingUser = await User.findOne({ where: { email: req.body.email }})
   if (!(existingUser == null)) {
-    res.status(401).send(`User with email ${email} already exists.`)
+    res.status(401).send(`User with email ${req.body.email} already exists.`)
     return
   }
 
   const user = await User.create(Object.assign(req.body, {admin: false}), UserClientFields)
-  res.status(201).send(user.toJSON().id)
+  res.status(201).send({id: user.toJSON().id})
 })
 
 /* 
  * Route to get JWT from user email and password. 
  */
 router.post('/login', async function (req, res) {
-  const { email, password } = req.params
-  const user = await User.findOne({ where: { email: email }, attributes: ['id', 'name', 'email'] })
+  const { email, password } = req.body
+  console.log(`email: ${email} | password: ${password}`)
+  const user = await User.findOne({ where: { email: email }, attributes: UserClientFields })
 
   if (user == null) {
     res.status(401).send(`Unable to find email ${email}`)
     return
   }
 
-  if (!user.validPassword(password)) {
-    res.status(401).send(`Unable to find password ${password}`)
+  if (!(await bcrypt.compare(password, user.password))) {
+    res.status(401).send(`Incorrect password ${password}`)
     return
   }
 
-  const token = jwt.sign(user.toJSON(), secret_key)
-  res.status(200).json({token})
+  const { name_, email_, id_ } = user.toJSON()
+  
+  const token = jwt.sign({name: name_, email: email_, id: id_}, secret_key)
+  res.status(200).send({token: token})
 })
 
 /* 

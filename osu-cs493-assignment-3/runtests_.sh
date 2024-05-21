@@ -12,9 +12,9 @@ NC='\033[0m' # No Color
 # ==== Business endpoints ==== 
 echo -e "${BLUE}"
 
-# Post 
+# Creating user. 
 status 'POST create-user should return success'
-curl -v POST \
+curl -v -X POST \
     -H 'Content-Type: application/json' \
     -d '{ 
       "name": "someName", 
@@ -22,3 +22,33 @@ curl -v POST \
       "password": "somePassword" 
     }' \
     http://localhost:8000/users/
+
+status 'POST create-user should return failure'
+curl -v -X POST \
+    -H 'Content-Type: application/json' \
+    -d '{ 
+      "name": "someName2", 
+      "email": "someEmail@someDomain2", 
+      "password": "somePassword2",
+      "admin": true
+    }' \
+    http://localhost:8000/users/
+
+# Logging in. 
+status 'POST log-in should return success'
+curl -v -X POST \
+    -H 'Content-Type: application/json' \
+    -d '{ 
+      "email": "someEmail@someDomain", 
+      "password": "somePassword" 
+    }' \
+    http://localhost:8000/users/login/
+
+status 'POST log-in should return failure'
+curl -v -X POST \
+    -H 'Content-Type: application/json' \
+    -d '{ 
+      "email": "someEmail@someDomain", 
+      "password": "somePassword2" 
+    }' \
+    http://localhost:8000/users/login/
