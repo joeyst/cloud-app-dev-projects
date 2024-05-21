@@ -1,5 +1,4 @@
 const { Router } = require('express')
-// const { compareSync, compare } = require('bcrypt')
 const bcrypt = require('bcrypt')
 
 const { Business } = require('../models/business')
@@ -31,7 +30,6 @@ async function isValidUrlUserId(req, res, next) {
 /*
  * Route to create new account from user name, email, and password. 
  */
-// TODO: Do we need to return the ID here? 
 // TODO: If req.body includes admin attribute, just overwrite, or return error? 
 router.post('/', async function (req, res) {
   const existingUser = await User.findOne({ where: { email: req.body.email }})

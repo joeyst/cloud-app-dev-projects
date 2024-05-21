@@ -13,14 +13,6 @@ const User = sequelize.define('user', {
   admin: { type: DataTypes.BOOLEAN, defaultValue: false }
 })
 
-// sequelize.sync({ force: true })
-//   .then(() => {
-//     console.log('Table deleted and recreated successfully.');
-//   })
-//   .catch((error) => {
-//     console.error('Error deleting and recreating table:', error);
-//   });
-
 async function isAdmin(req) {
 	const user = await User.findOne({ where: { email: req.user.email }})
   return (user.admin == true) // I feel like being explicit with == true here makes it more obvious what it's doing. 
