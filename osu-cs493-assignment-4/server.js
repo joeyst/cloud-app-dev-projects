@@ -1,5 +1,6 @@
 const express = require('express')
 const morgan = require('morgan')
+const upload = require('multer')()
 
 const api = require('./api')
 const { connectToDb } = require('./lib/mongo')
@@ -13,6 +14,7 @@ const port = process.env.PORT || 8000
 app.use(morgan('dev'))
 
 app.use(express.json())
+app.use(upload.array())
 app.use(express.static('public'))
 
 /*
