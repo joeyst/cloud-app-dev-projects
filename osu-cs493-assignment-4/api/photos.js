@@ -8,7 +8,8 @@ const { validateAgainstSchema } = require('../lib/validation')
 const {
   PhotoSchema,
   insertNewPhoto,
-  getPhotoById
+  getPhotoById, 
+  saveImageInfo
 } = require('../models/photo')
 
 const multer = require('multer')

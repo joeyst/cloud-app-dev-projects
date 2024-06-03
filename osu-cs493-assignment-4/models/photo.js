@@ -17,6 +17,13 @@ const PhotoSchema = {
 }
 exports.PhotoSchema = PhotoSchema
 
+exports.saveImageInfo = async function (image) {
+  const db = getDbReference();
+  const collection = db.collection('photos');
+  const result = await collection.insertOne(image);
+  return result.insertedId;
+}
+
 /*
  * Executes a DB query to insert a new photo into the database.  Returns
  * a Promise that resolves to the ID of the newly-created photo entry.
