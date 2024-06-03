@@ -38,7 +38,8 @@ router.post('/', upload.single('file'), async (req, res) => {
         path: req.file.path,
         userId: req.body.userId
       };
-      const id = await saveImageInfo(image);
+      const id = await saveImageFile(image);
+      await removeUploadedFile(req.file);
       res.status(200).send({ id: id });
     } catch (err) {
       next(err);

@@ -63,3 +63,15 @@ exports.getImageInfoById = async (id) => {
     return results[0];
   }
 }
+
+exports.removeUploadedFile(file) {
+  return new Promise((resolve, reject) => {
+    fs.unlink(file.path, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
