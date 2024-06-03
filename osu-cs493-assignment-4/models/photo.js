@@ -63,7 +63,7 @@ exports.getImageInfoById = async (id) => {
   }
 }
 
-exports.removeUploadedFile(file) {
+exports.removeUploadedFile = (file) => {
   return new Promise((resolve, reject) => {
     fs.unlink(file.path, (err) => {
       if (err) {
@@ -73,4 +73,11 @@ exports.removeUploadedFile(file) {
       }
     });
   });
+}
+
+exports.getImageDownloadStreamByFilename = (filename) => {
+  const db = getDbReference();
+  const bucket =
+    new GridFSBucket(db, { bucketName: 'images' });
+  return bucket.openDownloadStreamByName(filename);
 }
