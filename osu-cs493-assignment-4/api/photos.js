@@ -60,7 +60,13 @@ router.get('/:id', async (req, res, next) => {
     if (image) {
       delete image.path;
       image.url = `/media/images/${image.filename}`;
-      res.status(200).send(image);
+      const responseBody = {
+        _id: image._id,
+        url: `/media/images/${image.filename}`,
+        contentType: image.metadata.contentType,
+        userId: image.metadata.userId,
+      };
+      res.status(200).send(responseBody);
     } else {
       next();
     }

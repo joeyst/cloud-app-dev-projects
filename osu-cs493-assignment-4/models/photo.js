@@ -52,14 +52,13 @@ exports.saveImageFile = async (image) => {
 
 exports.getImageInfoById = async (id) => {
   const db = getDbReference();
-  const collection = db.collection('images');
+  const bucket = new GridFSBucket(db, { bucketName: 'images' });
 
   if (!ObjectId.isValid(id)) {
     return null;
   } else {
-    const results = await collection
-      .find({ _id: new ObjectId(id) })
-      .toArray();
+    const results =
+      await bucket.find({ _id: new ObjectId(id) }).toArray();
     return results[0];
   }
 }
