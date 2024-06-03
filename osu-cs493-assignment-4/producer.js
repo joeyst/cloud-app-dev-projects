@@ -7,12 +7,13 @@ async function main() {
     const connection = await amqp.connect(rabbitmqUrl);
     const channel = await connection.createChannel();
     await channel.assertQueue('echo');
-    channel.consume(queue, (msg) => {
-      if (msg) {
-        console.log(msg.content.toString());
-      }
-        channel.ack(msg);
-      });
+    const message =
+      'The quick brown fox jumped over the lazy dog';
+
+    message.split(' ').forEach((word) => {
+      channel.sendToQueue('echo', Buffer.from(word));
+    });
+    setTimeout(() => { connection.close(); }, 500);
   } catch (err) {
     console.error(err);
   }
