@@ -10,24 +10,22 @@ const {
   insertNewPhoto,
   getPhotoById
 } = require('../models/photo')
-// const upload = multer({ "dest": `${__dirname}/uploads`})
+
 const multer = require('multer')
-const upload = multer({ storage: multer.diskStorage({ destination: `${__dirname}/uploads` }) })
+const imageTypes = ["image/jpeg", "image/png"]
+const upload = multer({
+  storage: multer.diskStorage({ destination: `${__dirname}/uploads` }),
+  fileFilter: (req, file, callback) => {
+    callback(null, !!imageTypes[file.mimetype]);
+  }
+});
 
 const router = Router()
-
-const imageTypes = ["image/jpeg", "image/png"]
-async function validateIsImage(req, res, next) {
-  if (!imageTypes.includes(req.body.file.mimetype)) {
-    res.status(400).send(`Invalid file type ${req.body.file.mimetype}`)
-  }
-  next()
-}
 
 /*
  * POST /photos - Route to create a new photo.
  */
-router.post('/', upload.single('file'), validateIsImage, async (req, res) => {
+router.post('/', upload.single('file'), async (req, res) => {
   if (validateAgainstSchema(req.body, PhotoSchema)) {
     try {
       const id = await insertNewPhoto(req.body)

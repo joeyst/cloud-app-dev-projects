@@ -22,6 +22,7 @@ exports.PhotoSchema = PhotoSchema
  * a Promise that resolves to the ID of the newly-created photo entry.
  */
 async function insertNewPhoto(photo) {
+  console.log(`RECEIVED IN insertNewPhoto: ${JSON.stringify(photo)}`)
   photo = extractValidFields(photo, PhotoSchema)
   
   const db = getDbReference();
@@ -34,7 +35,7 @@ async function insertNewPhoto(photo) {
   };
 
   const uploadStream = bucket.openUploadStream(
-    photo.filename,
+    photo.file.filename,
     { metadata: metadata }
   );
 
@@ -47,9 +48,6 @@ async function insertNewPhoto(photo) {
         resolve(result._id);
       });
 
-  photo.businessId = ObjectId(photo.businessId)
-  const collection = db.collection('photos')
-  const result = await collection.insertOne(photo)
   return result.insertedId
 }
 exports.insertNewPhoto = insertNewPhoto

@@ -34,3 +34,5 @@ services:
       - db
       - db-init
     restart: on-failure
+
+  
