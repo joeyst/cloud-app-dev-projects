@@ -4,12 +4,10 @@
 
 const { Router } = require('express')
 
-const { validateAgainstSchema } = require('../lib/validation')
 const {
   PhotoSchema,
-  insertNewPhoto,
-  getPhotoById, 
-  saveImageInfo
+  saveImageInfo,
+  getImageInfoById
 } = require('../models/photo')
 
 const multer = require('multer')
