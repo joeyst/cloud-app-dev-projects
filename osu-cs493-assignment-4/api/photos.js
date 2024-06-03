@@ -54,7 +54,18 @@ router.post('/', upload.single('file'), async (req, res) => {
  * GET /photos/{id} - Route to fetch info about a specific photo.
  */
 router.get('/:id', async (req, res, next) => {
-  
+  try {
+    const image = await getImageInfoById(req.params.id);
+    if (image) {
+      delete image.path;
+      image.url = `/media/images/${image.filename}`;
+      res.status(200).send(image);
+    } else {
+      next();
+    }
+  } catch (err) {
+    next(err);
+  }
 })
 
 module.exports = router

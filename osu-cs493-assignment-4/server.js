@@ -30,6 +30,11 @@ app.use('*', function (req, res, next) {
   })
 })
 
+app.use(
+  '/media/images',
+  express.static(`${__dirname}/uploads`)
+);
+
 app.use('*', (err, req, res, next) => {
   console.error(err);
   res.status(500).send({
