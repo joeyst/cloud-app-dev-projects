@@ -21,7 +21,6 @@ async function main() {
         downloadStream.on('end', async () => {
           const dimensions = sizeOf(Buffer.concat(imageData));
           const result = await updateImageSizeById(id, dimensions);
-          // TODO: What is result doing here? 
         });
         console.log(msg.content.toString());
       }

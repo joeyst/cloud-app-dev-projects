@@ -116,8 +116,7 @@ separate steps:
     straightforward interface.  However, you're free to use whatever
     tool you like to perform the resizing.
 
-  * **Create an association between the original photo and its
-    thumbnail.**  After your RabbitMQ consumer generates a thumbnail
+  * **Create an association between the original photo and its thumbnail.**  After your RabbitMQ consumer generates a thumbnail
     image and stores it in GridFS, you'll need to represent the
     one-to-one association between original and thumbnail so you can
     "find" the thumbnail from the original image.  The easiest way to do
