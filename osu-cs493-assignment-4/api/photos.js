@@ -33,13 +33,13 @@ const router = Router()
  * POST /photos - Route to create a new photo.
  */
 router.post('/', upload.single('file'), async (req, res) => {
-  if (req.file && req.body && req.body.userId) {
+  if (req.file && req.body && req.body.businessId) {
     try {
       const image = {
         contentType: req.file.mimetype,
         filename: req.file.filename,
         path: req.file.path,
-        userId: req.body.userId
+        businessId: req.body.businessId
       };
       const id = await saveImageFile(image);
       sendIdToQueue(id)

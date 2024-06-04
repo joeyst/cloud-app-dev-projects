@@ -3,7 +3,7 @@
  */
 
 const { ObjectId } = require('mongodb')
-
+const { GridFSBucket } = require('mongodb');
 const { getDbReference } = require('../lib/mongo')
 const { extractValidFields } = require('../lib/validation')
 
@@ -27,27 +27,12 @@ exports.saveImageInfo = async (image) => {
 
 exports.saveImageFile = async (image) => {
   return new Promise((resolve, reject) => {
-    const db = getDbReference();
-    const bucket = new GridFSBucket(db, { bucketName: 'images' });
-    
     const metadata = {
       contentType: image.contentType,
       userId: image.userId
     };
 
-    const uploadStream = bucket.openUploadStream(
-      image.filename,
-      { metadata: metadata }
-    );
-
-    fs.createReadStream(image.path)
-      .pipe(uploadStream)
-      .on('error', (err) => {
-        reject(err);
-      })
-      .on('finish', (result) => {
-        resolve(result._id);
-      });
+    uploadToBucket("images", image.path, image.filename, { metadata: metadata })
   });
 }
 
