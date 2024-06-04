@@ -68,7 +68,7 @@ router.get('/:id', async (req, res, next) => {
         _id: image._id,
         url: `/media/images/${image.filename}`,
         contentType: image.metadata.contentType,
-        userId: image.metadata.userId,
+        businessId: image.metadata.businessId,
       };
       res.status(200).send(responseBody);
     } else {

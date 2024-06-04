@@ -3,10 +3,6 @@ const amqp = require('amqplib');
 const rabbitmqHost = process.env.RABBITMQ_HOST;
 const rabbitmqUrl = `amqp://${rabbitmqHost}`;
 
-function getDownloadStreamById(id) {
-  
-}
-
 async function updateImageSizeById(id, dimensions) {
 
 }
@@ -28,7 +24,7 @@ async function main() {
 
         downloadStream.on('end', async () => {
           const dimensions = sizeOf(Buffer.concat(imageData));
-          const result = await updateImageSizeById(id, dimensions);
+          await updateImageSizeById(id, dimensions);
         });
         console.log(msg.content.toString());
       }
