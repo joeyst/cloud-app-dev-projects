@@ -1,5 +1,11 @@
 const sizeOf = require('image-size');
 const amqp = require('amqplib');
+const Jimp = require("jimp");
+
+const { uploadToBucket, uploadThumbnail } = require("./gridFs")
+// uploadToBucket(bucketName, src, dest, metadata) 
+// uploadThumbnail(image, dest, metadata) 
+
 const rabbitmqHost = process.env.RABBITMQ_HOST;
 const rabbitmqUrl = `amqp://${rabbitmqHost}`;
 const queueName = "images"
@@ -24,10 +30,14 @@ async function main() {
         downloadStream.on('data', (data) => {
           imageData.push(data);
         });
-
+        
         downloadStream.on('end', async () => {
-          const dimensions = sizeOf(Buffer.concat(imageData));
-          await updateImageSizeById(id, dimensions);
+          const image = Buffer.concat(imageData)
+          const imageDimensions = sizeOf(image)
+
+          await updateImageSizeById(id, imageDimensions);
+          const { businessId, ... } = ...
+          uploadThumbnail(image, ..., { businessId, ...})
         });
         console.log(msg.content.toString());
       }
