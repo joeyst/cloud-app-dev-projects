@@ -11,7 +11,7 @@ const {
   getImageDownloadStreamByFilename 
 } = require('../models/photo')
 
-const { sendIdToQueue } = require('../../rabbitmq')
+const { sendIdToQueue } = require('../rabbitmq')
 
 const multer = require('multer')
 const imageTypes = ["image/jpeg", "image/png"]
