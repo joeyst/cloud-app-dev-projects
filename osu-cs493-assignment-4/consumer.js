@@ -3,6 +3,14 @@ const amqp = require('amqplib');
 const rabbitmqHost = process.env.RABBITMQ_HOST;
 const rabbitmqUrl = `amqp://${rabbitmqHost}`;
 
+function getDownloadStreamById(id) {
+  
+}
+
+async function updateImageSizeById(id, dimensions) {
+
+}
+
 async function main() {
   try {
     const connection = await amqp.connect(rabbitmqUrl);

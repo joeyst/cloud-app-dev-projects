@@ -7,7 +7,8 @@ const { Router } = require('express')
 const {
   PhotoSchema,
   saveImageInfo,
-  getImageInfoById
+  getImageInfoById,
+  getImageDownloadStreamByFilename
 } = require('../models/photo')
 
 const { getChannel } = require('../../rabbitmq')

@@ -13,7 +13,8 @@ const { extractValidFields } = require('../lib/validation')
 const PhotoSchema = {
   file: { require: true},
   businessId: { required: true },
-  caption: { required: false }
+  caption: { required: false },
+  dimensions: { required: false}
 }
 exports.PhotoSchema = PhotoSchema
 
@@ -26,7 +27,7 @@ exports.saveImageInfo = async (image) => {
 
 exports.saveImageFile = async (image) => {
   return new Promise((resolve, reject) => {
-    const db = getDBReference();
+    const db = getDbReference();
     const bucket = new GridFSBucket(db, { bucketName: 'images' });
     
     const metadata = {
@@ -80,4 +81,8 @@ exports.getImageDownloadStreamByFilename = (filename) => {
   const bucket =
     new GridFSBucket(db, { bucketName: 'images' });
   return bucket.openDownloadStreamByName(filename);
+}
+
+exports.getDownloadStreamById = (id) => {
+  return exports.getImageDownloadStreamByFilename(exports.getImageInfoById(id).filename)
 }
