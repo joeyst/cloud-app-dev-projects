@@ -4,8 +4,7 @@ const rabbitmqUrl = `amqp://${rabbitmqHost}`;
 
 export function getChannel() {
   const connection = await amqp.connect(rabbitmqUrl);
-  const channel = await connection.createChannel();
-  return channel 
+  return await connection.createChannel();
 }
 
 export function sendIdToQueue(id) {
