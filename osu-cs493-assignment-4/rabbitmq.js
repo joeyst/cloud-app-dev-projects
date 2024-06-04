@@ -5,8 +5,10 @@ const rabbitmqUrl = `amqp://${rabbitmqHost}`;
 const connection = await amqp.connect(rabbitmqUrl);
 const channel = await connection.createChannel();
 
-function getChannel() {
+export function getChannel() {
   return channel 
 }
 
-module.exports = getChannel 
+export function sendIdToQueue(id) {
+  getChannel().sendToQueue('images', Buffer.from(id.toString()))
+}

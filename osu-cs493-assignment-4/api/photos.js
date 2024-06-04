@@ -8,10 +8,10 @@ const {
   PhotoSchema,
   saveImageInfo,
   getImageInfoById,
-  getImageDownloadStreamByFilename
+  getImageDownloadStreamByFilename 
 } = require('../models/photo')
 
-const { getChannel } = require('../../rabbitmq')
+const { sendIdToQueue } = require('../../rabbitmq')
 
 const multer = require('multer')
 const imageTypes = ["image/jpeg", "image/png"]
@@ -42,8 +42,7 @@ router.post('/', upload.single('file'), async (req, res) => {
         userId: req.body.userId
       };
       const id = await saveImageFile(image);
-      const channel = getChannel();
-      channel.sendToQueue('images', Buffer.from(id.toString()));
+      sendIdToQueue(id)
       await removeUploadedFile(req.file);
       res.status(200).send({ id: id });
     } catch (err) {
