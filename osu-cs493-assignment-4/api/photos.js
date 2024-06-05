@@ -18,18 +18,21 @@ const crypto = require('crypto')
 const { sendIdToQueue } = require('../rabbitmq')
 
 const multer = require('multer')
-const imageTypes = ["image/jpeg", "image/png"]
-const imageFileTypes = ["jpeg", "png"]
+// const imageTypes = ["image/jpeg", "image/png"]
+// const imageFileTypes = ["jpeg", "png"]
+const imageTypes = {"image/jpeg": "jpeg", "image/png": "png"}
 const upload = multer({
   storage: multer.diskStorage({ destination: `${__dirname}/uploads` }),
   filename: (req, file, callback) => { 
     const filename = crypto.pseudoRandomBytes(16).toString('hex');
-    const extension = imageFileTypes[imageTypes.indexOf(file.mimetype)];
+    const extension = imageTypes[file.mimetype]
+    console.log(`Extension: ${extension}`)
+    console.log(`File mimetype: ${file.mimetype}`)
     console.log(`FILE: ${JSON.stringify(file)}`)
     callback(null, `${filename}.${extension}`);
   },
   fileFilter: (req, file, callback) => {
-    callback(null, imageTypes.includes(file.mimetype));
+    callback(null, !!imageTypes[file.mimetype]);
   }
 });
 
