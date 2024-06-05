@@ -35,14 +35,18 @@ async function main() {
         
         downloadStream.on('end', async () => {
           console.log("CONSUMER REACHED downloadStream.on")
-          const image = Buffer.concat(imageData)
-          const imageDimensions = sizeOf(image)
+          const originalImage = Buffer.concat(imageData)
+          const imageDimensions = sizeOf(originalImage)
+          const resizedImage = await Jimp
+            .read(originalImage)
+            .then(image => image.resize(100, 100)
+                                .getBufferAsync(Jimp.MIME_JPEG));
 
           console.log("CONSUMER REACHED updateImageAttributeById")
           await updateImageAttributeById(id, "dimensions", imageDimensions);
           const { filename } = getImageInfoById(id)
           console.log("CONSUMER REACHED uploadThumbnail")
-          await uploadThumbnail(image, id, filename)
+          await uploadThumbnail(resizedImage, id, filename)
           console.log("CONSUMER REACHED updateImageAttributeById")
           await updateImageAttributeById(id, "thumbId", id) // <= this feels redundant to me, but iiuc the instructions, it was included, potentially for posterity of explicitly saying what the corresponding thumbId is. 
           const result = await getImageInfoById(id)

@@ -24,6 +24,21 @@ function uploadToBucket(bucketName, src, dest, metadata, resolve, reject) {
 
 exports.uploadToBucket = uploadToBucket 
 
+async function printThumbnails() {
+  const db = getDbReference();
+  db.collection('thumbs.files').find({}).toArray((err, documents) => {
+    if (err) {
+      console.error('Error retrieving documents:', err);
+      return;
+    }
+
+    console.log('All documents in the collection:');
+    documents.forEach((document) => {
+      console.log(document);
+    });
+  });
+}
+
 function uploadThumbnail(image, id, dest) {
   return new Promise((resolve, reject) => {
     const db = getDbReference();
@@ -40,6 +55,7 @@ function uploadThumbnail(image, id, dest) {
         reject(err);
       })
       .on('finish', (result) => {
+        printThumbnails()
         resolve(result._id);
       });
     })
