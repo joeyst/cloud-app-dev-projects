@@ -2,7 +2,7 @@
  * Module for working with a MongoDB connection.
  */
 
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectId } = require('mongodb')
 
 const mongoHost = process.env.MONGO_HOST || 'localhost'
 const mongoPort = process.env.MONGO_PORT || 27017
@@ -38,8 +38,25 @@ exports.closeDbConnection = function (callback) {
 
 async function updateImageAttributeById(id, key, value) {
   const db = exports.getDbReference()
-  db.findOneAndUpdate({ "_id": id }, 
-    { $set: { [key]: value } })
+
+  // Admittedly I took/adapted some code from online here for 
+  // debugging purposes, will remove in next commit though! 
+  db.collection('images.files').find({}).toArray((err, documents) => {
+    if (err) {
+      console.error('Error retrieving documents:', err);
+      return;
+    }
+
+    console.log('All documents in the collection:');
+    documents.forEach((document) => {
+      console.log(document);
+    });
+  });
+
+  const fromImageAttributeById = await (db.collection('images.files')
+    .findOneAndUpdate({ "_id": new ObjectId(id) }, 
+    { $set: { [key]: value } }))
+  console.log(`fromImageAttributeById: ${JSON.stringify(fromImageAttributeById)}`)
 }
 
 exports.updateImageAttributeById = updateImageAttributeById 

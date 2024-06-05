@@ -5,6 +5,7 @@
 const { ObjectId, GridFSBucket } = require('mongodb')
 const { getDbReference } = require('../lib/mongo')
 const { uploadToBucket } = require('../gridFs')
+const fs = require('fs')
 
 /*
  * Schema describing required/optional fields of a photo object.
@@ -24,11 +25,12 @@ exports.saveImageInfo = async (image) => {
   return result.insertedId;
 }
 
-exports.saveImageFile = async (image) => {
+exports.saveImageFile = (image) => {
   return new Promise((resolve, reject) => {
     const metadata = {
       contentType: image.contentType,
-      businessId: image.businessId
+      businessId: image.businessId,
+      filename: image.filename
     };
 
     uploadToBucket("images", image.path, image.filename, { metadata: metadata }, resolve, reject) // I forgot about resolve and reject, oops. My design is wrong here. 
@@ -74,6 +76,6 @@ exports.getThumbnailDownloadStreamByFilename = (filename) => {
   return bucket.openDownloadStreamByName(filename);
 }
 
-exports.getDownloadStreamById = (id) => {
-  return exports.getImageDownloadStreamByFilename(exports.getImageInfoById(id).filename)
+exports.getDownloadStreamById = async (id) => {
+  return exports.getImageDownloadStreamByFilename((await exports.getImageInfoById(id)).filename)
 }

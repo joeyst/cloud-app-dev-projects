@@ -1,6 +1,7 @@
 const { getDbReference } = require('./lib/mongo')
 const { GridFSBucket } = require('mongodb');
 const { Readable } = require('stream')
+const fs = require('fs')
 
 function uploadToBucket(bucketName, src, dest, metadata, resolve, reject) {
   const db = getDbReference();
@@ -23,7 +24,7 @@ function uploadToBucket(bucketName, src, dest, metadata, resolve, reject) {
 
 exports.uploadToBucket = uploadToBucket 
 
-async function uploadThumbnail(image, id, dest) {
+function uploadThumbnail(image, id, dest) {
   return new Promise((resolve, reject) => {
     const db = getDbReference();
     const bucket = new GridFSBucket(db, { bucketName: "thumbs" });

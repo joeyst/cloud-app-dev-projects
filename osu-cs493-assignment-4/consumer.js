@@ -5,6 +5,7 @@ const Jimp = require("jimp");
 const { uploadToBucket, uploadThumbnail } = require("./gridFs")
 // uploadToBucket(bucketName, src, dest, metadata) 
 // uploadThumbnail(image, dest, metadata) 
+const { connectToDb } = require('./lib/mongo')
 
 const rabbitmqHost = process.env.RABBITMQ_HOST;
 const rabbitmqUrl = `amqp://${rabbitmqHost}`;
@@ -20,24 +21,32 @@ async function main() {
     const channel = await connection.createChannel();
     await channel.assertQueue(queueName);
     console.log("%c consumer connected to RabbitMQ.", "color:green")
-    channel.consume(queueName, (msg) => {
+    channel.consume(queueName, async (msg) => {
       if (msg) {
         const id = msg.content.toString();
-        const downloadStream = getDownloadStreamById(id);
+        console.log("CONSUMER REACHED getDownloadStreamById")
+        const downloadStream = await getDownloadStreamById(id);
 
         const imageData = [];
         downloadStream.on('data', (data) => {
+          console.log("CONSUMER REACHED downloadStream.on('data', ...)")
           imageData.push(data);
         });
         
         downloadStream.on('end', async () => {
+          console.log("CONSUMER REACHED downloadStream.on")
           const image = Buffer.concat(imageData)
           const imageDimensions = sizeOf(image)
 
-          updateImageAttributeById(id, "dimensions", imageDimensions);
+          console.log("CONSUMER REACHED updateImageAttributeById")
+          await updateImageAttributeById(id, "dimensions", imageDimensions);
           const { filename } = getImageInfoById(id)
-          uploadThumbnail(image, id, filename)
-          updateImageAttributeById(id, "thumbId", id) // <= this feels redundant to me, but iiuc the instructions, it was included, potentially for posterity of explicitly saying what the corresponding thumbId is. 
+          console.log("CONSUMER REACHED uploadThumbnail")
+          await uploadThumbnail(image, id, filename)
+          console.log("CONSUMER REACHED updateImageAttributeById")
+          await updateImageAttributeById(id, "thumbId", id) // <= this feels redundant to me, but iiuc the instructions, it was included, potentially for posterity of explicitly saying what the corresponding thumbId is. 
+          const result = await getImageInfoById(id)
+          console.log(`RESULT: ${JSON.stringify(result)}`)
         });
         console.log(msg.content.toString());
       }
@@ -48,4 +57,4 @@ async function main() {
     throw new Error("consumer.js error.")
   }
 }
-main();
+connectToDb(main) // Is there another way to connect to the database that doesn't use an API endpoint directly? Not sure if this is correct. 

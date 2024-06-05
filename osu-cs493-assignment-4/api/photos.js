@@ -7,23 +7,29 @@ const { Router } = require('express')
 const {
   PhotoSchema,
   saveImageInfo,
+  saveImageFile,
   getImageInfoById,
-  getImageDownloadStreamByFilename 
+  getImageDownloadStreamByFilename,
+  removeUploadedFile
 } = require('../models/photo')
+
+const crypto = require('crypto')
 
 const { sendIdToQueue } = require('../rabbitmq')
 
 const multer = require('multer')
 const imageTypes = ["image/jpeg", "image/png"]
+const imageFileTypes = ["jpeg", "png"]
 const upload = multer({
   storage: multer.diskStorage({ destination: `${__dirname}/uploads` }),
   filename: (req, file, callback) => { 
     const filename = crypto.pseudoRandomBytes(16).toString('hex');
-    const extension = imageTypes[file.mimetype];
+    const extension = imageFileTypes[imageTypes.indexOf(file.mimetype)];
+    console.log(`FILE: ${JSON.stringify(file)}`)
     callback(null, `${filename}.${extension}`);
   },
   fileFilter: (req, file, callback) => {
-    callback(null, !!imageTypes[file.mimetype]);
+    callback(null, imageTypes.includes(file.mimetype));
   }
 });
 
@@ -32,7 +38,9 @@ const router = Router()
 /*
  * POST /photos - Route to create a new photo.
  */
-router.post('/', upload.single('file'), async (req, res) => {
+router.post('/', upload.single('file'), async (req, res, next) => {
+  console.log(`file: ${JSON.stringify(req.file)}`)
+  console.log(`body: ${JSON.stringify(req.body)}`)
   if (req.file && req.body && req.body.businessId) {
     try {
       const image = {
@@ -42,9 +50,13 @@ router.post('/', upload.single('file'), async (req, res) => {
         businessId: req.body.businessId
       };
       const id = await saveImageFile(image);
-      sendIdToQueue(id)
+      console.log("PASSED saveImageFile.")
+      await sendIdToQueue(id)
+      console.log("SENT TO QUEUE.")
       await removeUploadedFile(req.file);
+      console.log("REMOVED UPLOADED FILE.")
       res.status(200).send({ id: id });
+      console.log("SENT UPLOADED FILE.")
     } catch (err) {
       next(err);
     }

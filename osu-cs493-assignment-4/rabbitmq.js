@@ -7,8 +7,8 @@ async function getChannel() {
   return await connection.createChannel();
 }
 
-function sendIdToQueue(id) {
-  getChannel().sendToQueue('images', Buffer.from(id.toString()))
+async function sendIdToQueue(id) {
+  await getChannel().then(channel => channel.sendToQueue('images', Buffer.from(id.toString())))
 }
 
 module.exports = {

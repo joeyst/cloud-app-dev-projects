@@ -14,7 +14,6 @@ const port = process.env.PORT || 8000
 app.use(morgan('dev'))
 
 app.use(express.json())
-app.use(upload.array())
 app.use(express.static('public'))
 
 /*
