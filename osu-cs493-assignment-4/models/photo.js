@@ -67,6 +67,13 @@ exports.getImageDownloadStreamByFilename = (filename) => {
   return bucket.openDownloadStreamByName(filename);
 }
 
+exports.getThumbnailDownloadStreamByFilename = (filename) => {
+  const db = getDbReference();
+  const bucket =
+    new GridFSBucket(db, { bucketName: 'thumbs' });
+  return bucket.openDownloadStreamByName(filename);
+}
+
 exports.getDownloadStreamById = (id) => {
   return exports.getImageDownloadStreamByFilename(exports.getImageInfoById(id).filename)
 }
