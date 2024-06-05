@@ -10,11 +10,9 @@ const rabbitmqHost = process.env.RABBITMQ_HOST;
 const rabbitmqUrl = `amqp://${rabbitmqHost}`;
 const queueName = "images"
 
-const { getDownloadStreamById } = require('./models/photo')
+const { getDownloadStreamById, getImageInfoById } = require('./models/photo')
 
-async function updateImageSizeById(id, dimensions) {
-
-}
+const { updateImageAttributeById } = require('./lib/mongo')
 
 async function main() {
   try {
@@ -35,9 +33,10 @@ async function main() {
           const image = Buffer.concat(imageData)
           const imageDimensions = sizeOf(image)
 
-          await updateImageSizeById(id, imageDimensions);
-          const { businessId, ... } = ...
-          uploadThumbnail(image, ..., { businessId, ...})
+          updateImageAttributeById(id, "dimensions", imageDimensions);
+          const { filename } = getImageInfoById(id)
+          uploadThumbnail(image, id, filename)
+          updateImageAttributeById(id, "thumbId", id) // <= this feels redundant to me, but iiuc the instructions, it was included, potentially for posterity of explicitly saying what the corresponding thumbId is. 
         });
         console.log(msg.content.toString());
       }

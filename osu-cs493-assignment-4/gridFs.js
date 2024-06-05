@@ -2,7 +2,7 @@ const { getDbReference } = require('./lib/mongo')
 const { GridFSBucket } = require('mongodb');
 const { Readable } = require('stream')
 
-function uploadToBucket(bucketName, src, dest, metadata) {
+function uploadToBucket(bucketName, src, dest, metadata, resolve, reject) {
   const db = getDbReference();
   const bucket = new GridFSBucket(db, { bucketName: bucketName });
 
@@ -23,24 +23,25 @@ function uploadToBucket(bucketName, src, dest, metadata) {
 
 exports.uploadToBucket = uploadToBucket 
 
-function uploadThumbnail(image, dest, metadata) {
-  const db = getDbReference();
-  const bucket = new GridFSBucket(db, { bucketName: "thumbs" });
+async function uploadThumbnail(image, id, dest) {
+  return new Promise((resolve, reject) => {
+    const db = getDbReference();
+    const bucket = new GridFSBucket(db, { bucketName: "thumbs" });
 
-  const uploadStream = bucket.openUploadStream(
-    dest,
-    { metadata: metadata }
-  );
-
-  
-  Readable.from(image)
-    .pipe(uploadStream)
-    .on('error', (err) => {
-      reject(err);
+    const uploadStream = bucket.openUploadStreamWithId(
+      id,
+      dest
+    );
+    
+    Readable.from(image)
+      .pipe(uploadStream)
+      .on('error', (err) => {
+        reject(err);
+      })
+      .on('finish', (result) => {
+        resolve(result._id);
+      });
     })
-    .on('finish', (result) => {
-      resolve(result._id);
-    });
 }
 
 exports.uploadThumbnail = uploadThumbnail 

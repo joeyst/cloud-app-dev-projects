@@ -36,7 +36,7 @@ exports.closeDbConnection = function (callback) {
   _closeDbConnection(callback)
 }
 
-function updateImageAttributeById(id, key, value) {
+async function updateImageAttributeById(id, key, value) {
   const db = exports.getDbReference()
   db.findOneAndUpdate({ "_id": id }, 
     { $set: { [key]: value } })
