@@ -9,7 +9,9 @@ const {
   BusinessSchema,
   getBusinessesPage,
   insertNewBusiness,
-  getBusinessById
+  getBusinessById,
+  getBusinessImageUrlById,
+  getBusinessThumbnailUrlById
 } = require('../models/business')
 
 const router = Router()
@@ -71,8 +73,11 @@ router.post('/', async (req, res) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const business = await getBusinessById(req.params.id)
+    const businessImageUrl = getBusinessImageUrlById(req.params.id)
+    const businessThumbnailUrl = getBusinessThumbnailUrlById(req.params.id)
+
     if (business) {
-      res.status(200).send(business)
+      res.status(200).send({...business, imageUrl: businessImageUrl, thumbnailUrl: businessThumbnailUrl})
     } else {
       next()
     }

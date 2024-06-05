@@ -67,6 +67,7 @@ router.get('/:id', async (req, res, next) => {
       const responseBody = {
         _id: image._id,
         url: `/media/images/${image.filename}`,
+        thumbnailUrl: `/media/thumbs/${image.filename}`,
         contentType: image.metadata.contentType,
         businessId: image.metadata.businessId,
       };

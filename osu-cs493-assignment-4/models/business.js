@@ -113,3 +113,20 @@ async function bulkInsertNewBusinesses(businesses) {
   return result.insertedIds
 }
 exports.bulkInsertNewBusinesses = bulkInsertNewBusinesses
+
+function getBusinessImageUrlById(businessId) {
+  const db = getDbReference()
+  const photosCollection = db.collection('photos')
+  const { filename } = photosCollection.find({ businessId })
+  return `/media/photos/${filename}`
+}
+
+function getBusinessThumbnailUrlById(businessId) {
+  const db = getDbReference()
+  const photosCollection = db.collection('photos')
+  const { filename } = photosCollection.find({ businessId })
+  return `/media/thumbs/${filename}`
+}
+
+exports.getBusinessImageUrlById = getBusinessImageUrlById 
+exports.getBusinessThumbnailUrlById = getBusinessThumbnailUrlById 
