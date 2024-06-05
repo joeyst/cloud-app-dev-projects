@@ -19,6 +19,7 @@ async function main() {
     const connection = await amqp.connect(rabbitmqUrl);
     const channel = await connection.createChannel();
     await channel.assertQueue(queueName);
+    console.log("%c consumer connected to RabbitMQ.", "color:green")
     channel.consume(queueName, (msg) => {
       if (msg) {
         const id = msg.content.toString();
